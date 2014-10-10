@@ -1,4 +1,4 @@
-package ru.spb.iac.services.impl;
+package ru.spb.iac.services.impl.templates;
 
 import com.mongodb.*;
 import lombok.extern.log4j.*;
@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.*;
 import org.springframework.stereotype.*;
 import ru.spb.iac.exceptions.MongoException;
 import ru.spb.iac.services.*;
+import ru.spb.iac.ui.model.MongoAddress;
 import ru.spb.iac.utils.*;
 
 import java.util.*;
@@ -42,11 +43,11 @@ public class MongoTemplateFactoryImpl implements MongoTemplateFactory {
     }
 
     @Override
-    public void initMap(String host, Integer port) throws MongoException {
-        String key = commonUtils.convertToKey(host, port);
+    public void initMap(MongoAddress mongoAddress) throws MongoException {
+        String key = commonUtils.convertToKey(mongoAddress.getHost(), mongoAddress.getPort());
         if (!templatesMap.containsKey(key)) {
             try {
-                MongoClient mongoClient = new MongoClient(host, port);
+                MongoClient mongoClient = new MongoClient(mongoAddress.getHost(), mongoAddress.getPort());
                 List<String> list = mongoClient.getDatabaseNames();
                 Map<String, MongoOperations> map = new HashMap<String, MongoOperations>();
                 for (String db : list) {
@@ -61,17 +62,17 @@ public class MongoTemplateFactoryImpl implements MongoTemplateFactory {
     }
 
     @Override
-    public MongoOperations getOperationsTemplate(String host, Integer port, String dbName) {
-        String key = commonUtils.convertToKey(host, port);
+    public MongoOperations getOperationsTemplate(MongoAddress mongoAddress) {
+        String key = commonUtils.convertToKey(mongoAddress.getHost(), mongoAddress.getPort());
         if (templatesMap.containsKey(key)) {
-            return templatesMap.get(key).get(dbName);
+            return templatesMap.get(key).get(mongoAddress.getDbName());
         }
         return null;
     }
 
     @Override
-    public List<String> getDBNames(String host, Integer port) {
-        String key = commonUtils.convertToKey(host, port);
+    public List<String> getDBNames(MongoAddress mongoAddress) {
+        String key = commonUtils.convertToKey(mongoAddress.getHost(), mongoAddress.getPort());
         if (templatesMap.containsKey(key)) {
             return new ArrayList<String>(templatesMap.get(key).keySet());
         }
@@ -79,10 +80,10 @@ public class MongoTemplateFactoryImpl implements MongoTemplateFactory {
     }
 
     @Override
-    public List<String> getCollectionsName(String host, Integer port, String dbName) {
-        String key = commonUtils.convertToKey(host, port);
+    public List<String> getCollectionsName(MongoAddress mongoAddress) {
+        String key = commonUtils.convertToKey(mongoAddress.getHost(), mongoAddress.getPort());
         if (templatesMap.containsKey(key)) {
-            MongoOperations temp = templatesMap.get(key).get(dbName);
+            MongoOperations temp = templatesMap.get(key).get(mongoAddress.getDbName());
             if (temp != null) {
                 return new ArrayList<String>(temp.getCollectionNames());
             }
