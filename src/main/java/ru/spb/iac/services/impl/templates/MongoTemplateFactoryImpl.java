@@ -90,4 +90,15 @@ public class MongoTemplateFactoryImpl implements MongoTemplateFactory {
         }
         return null;
     }
+
+    @Override
+    public Map<String, List<String>> getMongoInfo(MongoAddress address) {
+        Map<String, List<String>> data = new HashMap<String, List<String>>();
+        MongoAddress mongoAddress = new MongoAddress(address.getHost(),address.getPort());
+        for(String dbName : getDBNames(address)){
+            mongoAddress.setDbName(dbName);
+            data.put(dbName,getCollectionsName(mongoAddress));
+        }
+        return data;
+    }
 }
