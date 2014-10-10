@@ -1,21 +1,15 @@
 package ru.spb.iac.services.impl;
 
-import com.mongodb.Mongo;
-import lombok.extern.log4j.Log4j;
-import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.mongodb.core.MongoFactoryBean;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.stereotype.Service;
+import com.mongodb.*;
+import lombok.extern.log4j.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.data.mongodb.core.*;
+import org.springframework.stereotype.*;
 import ru.spb.iac.exceptions.MongoException;
-import ru.spb.iac.services.MongoTemplateFactory;
-import ru.spb.iac.utils.CommonUtils;
+import ru.spb.iac.services.*;
+import ru.spb.iac.utils.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author ismakaev
@@ -23,7 +17,7 @@ import java.util.Map;
  */
 @Log4j
 @Service("mongoTemplateFactory")
-public class MongoTemplateFactoryImpl implements MongoTemplateFactory{
+public class MongoTemplateFactoryImpl implements MongoTemplateFactory {
     /**
      * Map of all instances of mongo operations
      * class to definate datebase on selected
@@ -35,10 +29,7 @@ public class MongoTemplateFactoryImpl implements MongoTemplateFactory{
     @Qualifier("commonUtils")
     private CommonUtils commonUtils;
 
-    private MongoFactoryBean mongoFactoryBean;
-
     public MongoTemplateFactoryImpl() {
-        mongoFactoryBean = new MongoFactoryBean();
         this.templatesMap = new HashMap<String, Map<String, MongoOperations>>();
     }
 
@@ -53,39 +44,49 @@ public class MongoTemplateFactoryImpl implements MongoTemplateFactory{
     @Override
     public void initMap(String host, Integer port) throws MongoException {
         String key = commonUtils.convertToKey(host, port);
-        if (!templatesMap.containsKey(key)){
-            mongoFactoryBean.setHost(host);
-            mongoFactoryBean.setPort(port);
-            MongoFactoryBean(host)
-            Mongo mongo = null;
+        if (!templatesMap.containsKey(key)) {
             try {
-                mongo = mongoFactoryBean.getObject();
+                MongoClient mongoClient = new MongoClient(host, port);
+                List<String> list = mongoClient.getDatabaseNames();
+                Map<String, MongoOperations> map = new HashMap<String, MongoOperations>();
+                for (String db : list) {
+                    map.put(db, new MongoTemplate(new SimpleMongoDbFactory(mongoClient, db)));
+                }
+                templatesMap.put(key, map);
             } catch (Exception e) {
-                log.error(e.getMessage(),e);
+                log.error(e.getMessage(), e);
                 throw new MongoException(e.getCause());
             }
-            List<String> list = mongo.getDatabaseNames();
-            Map<String, MongoOperations> map = new HashMap<String, MongoOperations>();
-            for(String db : list){
-                map.put(db, new MongoTemplate(mongo,db));
-            }
-            templatesMap.put(key,map);
         }
     }
 
     @Override
     public MongoOperations getOperationsTemplate(String host, Integer port, String dbName) {
+        String key = commonUtils.convertToKey(host, port);
+        if (templatesMap.containsKey(key)) {
+            return templatesMap.get(key).get(dbName);
+        }
         return null;
     }
 
     @Override
     public List<String> getDBNames(String host, Integer port) {
-
+        String key = commonUtils.convertToKey(host, port);
+        if (templatesMap.containsKey(key)) {
+            return new ArrayList<String>(templatesMap.get(key).keySet());
+        }
         return null;
     }
 
     @Override
     public List<String> getCollectionsName(String host, Integer port, String dbName) {
+        String key = commonUtils.convertToKey(host, port);
+        if (templatesMap.containsKey(key)) {
+            MongoOperations temp = templatesMap.get(key).get(dbName);
+            if (temp != null) {
+                return new ArrayList<String>(temp.getCollectionNames());
+            }
+        }
         return null;
     }
 }
