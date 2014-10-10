@@ -1,19 +1,16 @@
 package ru.spb.iac.services.impl.mongo;
 
-import com.mongodb.DBObject;
-import lombok.extern.log4j.Log4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.stereotype.Service;
-import ru.spb.iac.services.MongoService;
-import ru.spb.iac.services.MongoTemplateFactory;
-import ru.spb.iac.services.impl.templates.MongoTemplateFactoryImpl;
-import ru.spb.iac.ui.model.MongoAddress;
+import com.google.common.base.*;
+import lombok.extern.log4j.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.data.mongodb.core.*;
+import org.springframework.data.mongodb.core.query.*;
+import org.springframework.stereotype.*;
+import ru.spb.iac.exceptions.*;
+import ru.spb.iac.services.*;
+import ru.spb.iac.ui.model.*;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * @author ismakaev
@@ -28,8 +25,13 @@ public class MongoServiceImpl implements MongoService {
     private MongoTemplateFactory mongoTemplateFactory;
 
     @Override
-    public void save(MongoAddress mongoAddress, Object obj) {
-
+    public void save(MongoAddress mongoAddress, Object obj) throws MongoException {
+        if(!Strings.isNullOrEmpty(mongoAddress.getDbName()) && !Strings.isNullOrEmpty(mongoAddress.getCollName())){
+            MongoOperations mongoOperations = mongoTemplateFactory.getOperationsTemplate(mongoAddress);
+            mongoOperations.save(obj, mongoAddress.getCollName());
+        } else{
+            throw new MongoException("No collection name of database name specified");
+        }
     }
 
     @Override

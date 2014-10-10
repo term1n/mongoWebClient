@@ -18,8 +18,6 @@ public class MongoTemplateFactoryImplTest extends MongoTemplateFactoryImpl {
 
     @Test
     public void test() throws Exception{
-        initMap("192.168.42.146",27017);
-        initMap("192.168.42.102",27017);
       log.debug("bdgfb");
     }
 
