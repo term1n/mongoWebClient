@@ -13,7 +13,7 @@ import java.util.*;
 public interface MongoService {
     public void save(MongoAddress mongoAddress, Object obj) throws MongoException;
     public void update(MongoAddress mongoAddress, Update update);
-    public List<Object> find(MongoAddress mongoAddress, Query query);
-    public void findOne(MongoAddress mongoAddress, Query query);
+    public List<Object> find(MongoAddress mongoAddress, Query query) throws MongoException;
+    public Object findOne(MongoAddress mongoAddress, Query query) throws MongoException;
     public boolean remove(MongoAddress mongoAddress, Query query);
 }

@@ -21,7 +21,7 @@ import java.util.*;
 public class MongoTemplateFactoryImpl implements MongoTemplateFactory {
     /**
      * Map of all instances of mongo operations
-     * class to definate datebase on selected
+     * class to definite database on selected
      * host:port.
      */
     private Map<String, Map<String, MongoOperations>> templatesMap;
@@ -62,12 +62,13 @@ public class MongoTemplateFactoryImpl implements MongoTemplateFactory {
     }
 
     @Override
-    public MongoOperations getOperationsTemplate(MongoAddress mongoAddress) {
+    public MongoOperations getOperationsTemplate(MongoAddress mongoAddress) throws MongoException {
         String key = commonUtils.convertToKey(mongoAddress.getHost(), mongoAddress.getPort());
         if (templatesMap.containsKey(key)) {
             return templatesMap.get(key).get(mongoAddress.getDbName());
+        } else{
+            throw new MongoException("No Operation template found");
         }
-        return null;
     }
 
     @Override

@@ -40,16 +40,29 @@ public class MongoServiceImpl implements MongoService {
     }
 
     @Override
-    public List<Object> find(MongoAddress mongoAddress, Query query) {
+    public List<Object> find(MongoAddress mongoAddress, Query query) throws MongoException {
         List<Object> resultLst = null;
-        MongoOperations mongoOperations = mongoTemplateFactory.getOperationsTemplate(mongoAddress);
-        resultLst = mongoOperations.find(query, Object.class, mongoAddress.getCollName());
+        MongoOperations mongoOperations = null;
+        try {
+            mongoOperations = mongoTemplateFactory.getOperationsTemplate(mongoAddress);
+            resultLst = mongoOperations.find(query, Object.class, mongoAddress.getCollName());
+        } catch (MongoException e) {
+            log.error(e.getMessage(),e);
+            throw e;
+        }
         return resultLst;
     }
 
     @Override
-    public void findOne(MongoAddress mongoAddress, Query query) {
-
+    public Object findOne(MongoAddress mongoAddress, Query query) throws MongoException {
+        MongoOperations mongoOperations = null;
+        try {
+            mongoOperations = mongoTemplateFactory.getOperationsTemplate(mongoAddress);
+            return mongoOperations.findOne(query, Object.class, mongoAddress.getCollName());
+        } catch (MongoException e) {
+            log.error(e.getMessage(),e);
+            throw e;
+        }
     }
 
     @Override

@@ -69,4 +69,11 @@ public abstract class CommonController {
             return false;
         }
     }
+    public boolean hasHostPortDbNColl(MongoAddress address) {
+        if (Strings.isNullOrEmpty(address.getHost()) || (address.getPort() == null) || Strings.isNullOrEmpty(address.getDbName()) || Strings.isNullOrEmpty(address.getCollName())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

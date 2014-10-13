@@ -28,15 +28,17 @@ public class MongoServiceImplTest extends MongoServiceImpl {
     @Test
     public void test() throws Exception{
         Gson gson = new Gson();
-        MongoAddress address = new MongoAddress("192.168.42.146",27017,"wcTest","test");
+        MongoAddress address = new MongoAddress("192.168.42.102",27017,"educTask","personData");
         mongoFactory.initMap(address);
 //        Map<String, List<String>> upda = mongoFactory.getMongoInfo(address);
-        List<Object> data = find(address, new Query());
+        Query q = new Query();
+        q.fields().include("_id");
+        List<Object> data = find(address, q);
         String dddd = JSON.serialize(data);
         List<Object> fffff = (List<Object>)JSON.parse(dddd);
 //        String dataa = gson.toJson(data);
 //        List<Object> obj = (List<Object>)gson.fromJson(dataa, List.class);
-        save(address,fffff.get(0));
-        log.debug("bdgfb");
+//        save(address,fffff.get(0));
+//        log.debug("bdgfb");
     }
 }
