@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @Log4j
 public class MongoViewController {
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/",method = RequestMethod.GET)
     public String hello(ModelMap model) {
         model.addAttribute("name", "Hello Mongo Web Client!");
         return "mongoWebClient";
