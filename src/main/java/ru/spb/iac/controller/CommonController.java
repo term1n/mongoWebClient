@@ -64,16 +64,16 @@ public abstract class CommonController {
 
     public boolean hasHostPort(MongoAddress address) {
         if (Strings.isNullOrEmpty(address.getHost()) || (address.getPort() == null)) {
-            return true;
-        } else {
             return false;
+        } else {
+            return true;
         }
     }
     public boolean hasHostPortDbNColl(MongoAddress address) {
         if (Strings.isNullOrEmpty(address.getHost()) || (address.getPort() == null) || Strings.isNullOrEmpty(address.getDbName()) || Strings.isNullOrEmpty(address.getCollName())) {
-            return true;
-        } else {
             return false;
+        } else {
+            return true;
         }
     }
 }

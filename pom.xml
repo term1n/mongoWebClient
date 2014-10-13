@@ -109,7 +109,7 @@
     </dependencies>
 
     <build>
-        <finalName>proxyService</finalName>
+        <finalName>mongoWebClient</finalName>
         <plugins>
             <!-- compile plugin  -->
             <plugin>
