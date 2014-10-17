@@ -11,6 +11,19 @@
     <title>Mongo Web Client</title>
 </head>
 <body>
-<h1>Hello : ${name}</h1>
+<%--main regions of mongo web client interface--%>
+
+<%--navigation panel--%>
+<nav class="navbar navbar-inverse" role="navigation" id="navigation-panel">
+</nav>
+
+<%--div for connection manager--%>
+<div id="database-connection-manager">
+</div>
+
+<script type="text/javascript">
+    MongoWebClient.start();
+</script>
+
 </body>
 </html>

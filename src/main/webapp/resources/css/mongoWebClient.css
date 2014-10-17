@@ -1,0 +1,13 @@
+.main-div{
+    width: 50%;
+    margin: 0 auto;
+    text-align: left;
+}
+body {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+.h-cursor-pointer:hover{
+    cursor: pointer;
+}
