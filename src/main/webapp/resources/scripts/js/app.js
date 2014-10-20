@@ -5,10 +5,11 @@ var MongoWebClient = new Marionette.Application();
 
 MongoWebClient.addRegions({
     connectionManagerRegion: "#database-connection-manager",
+    mainRegion: "#main-region",
     navigationRegion: "#navigation-panel"
 
 });
 MongoWebClient.on("start", function(){
-    console.log("started application");
-    MongoWebClient.NavigationPanel.Controller.showNavigationPanel("Mongo Web Client");
+    MongoWebClient.NavigationPanel.Controller.showStartView("Mongo Web Client");
+    MongoWebClient.DatabaseConnection.Controller.initView();
 });

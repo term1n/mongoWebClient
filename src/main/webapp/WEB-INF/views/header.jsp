@@ -22,9 +22,15 @@
 
     <%--custom scripts--%>
     <script src="<c:url value="/resources/scripts/js/app.js"/>"></script>
+
     <script src="<c:url value="/resources/scripts/js/templates/mongoWebClientTemplates.js"/>"></script>
-    <script src="<c:url value="/resources/scripts/js/views/NavigationPanelView.js"/>"></script>
-    <script src="<c:url value="/resources/scripts/js/views/NavigationPanelController.js"/>"></script>
+    <script src="<c:url value="/resources/scripts/js/views/navigation/NavigationPanelView.js"/>"></script>
+    <script src="<c:url value="/resources/scripts/js/views/navigation/NavigationPanelController.js"/>"></script>
+
+
+    <script src="<c:url value="/resources/scripts/js/views/mainRegion/MainRegionManual.js"/>"></script>
+    <script src="<c:url value="/resources/scripts/js/views/dcm/DatabaseConnectionView.js"/>"></script>
+    <script src="<c:url value="/resources/scripts/js/views/dcm/DatabaseConnectionController.js"/>"></script>
 
 
 </head>

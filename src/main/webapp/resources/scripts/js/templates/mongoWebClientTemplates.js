@@ -5,14 +5,28 @@ MongoWebClient.module("Templates", function (Templates, ContactManager, Backbone
 //Finally, all templates should appear only here
     Templates.navigationPanel = [
         "<div class='navbar-header'>",
-            "<span class='navbar-brand h-cursor-pointer'>{{appName}}</span>",
+        "<span class='navbar-brand h-cursor-pointer' id='mWcAppName'>{{appName}}</span>",
         "</div>",
         "<div class='collapse navbar-collapse'>",
         "<ul class='nav navbar-nav'>",
-            "<li>",
-                "<a class='h-cursor-pointer' id='create-connection'>Create connection</a>",
-            "</li>",
+        "<li id='create-connection'>",
+        "<a class='h-cursor-pointer'>Create connection</a>",
+        "</li>",
         "</ul>",
+        "</div>"
+    ].join("\n");
+    Templates.mongoWebClientManual = [
+        "<div>",
+        "<h1>Mongo Web Client</h1>",
+        "<p class='lead'>Comilito equinus</p>",
+
+        "<p class='lead'>Orbitas lacuna</p>",
+
+        "<p class='lead'>G'Odhun A'l Korok Boda Uh'm</p>",
+
+        "<p class='lead'>Boda Uh'm Ron'Kashal</p>",
+
+        "<p class='lead'>Detrimentum a do sola ditas.</p>",
         "</div>"
     ].join("\n");
 });
