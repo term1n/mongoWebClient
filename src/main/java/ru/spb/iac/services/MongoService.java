@@ -10,10 +10,12 @@ import java.util.*;
  * @author ismakaev
  *         Date: 10.10.14
  */
+//TODO check it (m.sekushin)
 public interface MongoService {
     public void save(MongoAddress mongoAddress, Object obj) throws MongoException;
     public void update(MongoAddress mongoAddress, Update update);
     public List<Object> find(MongoAddress mongoAddress, Query query) throws MongoException;
+    public List<Object> findAll(MongoAddress mongoAddress) throws MongoException;
     public Object findOne(MongoAddress mongoAddress, Query query) throws MongoException;
     public boolean remove(MongoAddress mongoAddress, Query query);
 }

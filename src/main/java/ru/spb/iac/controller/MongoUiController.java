@@ -19,6 +19,7 @@ import java.util.*;
 @Controller
 @RequestMapping("/mongo")
 @Log4j
+//TODO pick changes from interface (m.sekushin)
 public class MongoUiController extends CommonController {
 
     @Autowired
