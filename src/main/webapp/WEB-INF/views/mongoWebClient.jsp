@@ -45,7 +45,7 @@
                                         <label class="control-label">Name</label>
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control"/>
+                                        <input type="text" class="form-control" id="m_c_name"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -59,10 +59,10 @@
                                         <label class="control-label">Address</label>
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control"/>
+                                        <input type="text" class="form-control" id="m_c_host"/>
                                     </div>
-                                    <div class="col-sm-2">
-                                        <input type="text" class="form-control"/>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" id="m_c_port"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -73,20 +73,24 @@
                             </div>
                         </div>
                         <div class="tab-pane container-fluid" id="connection-auth-connect">
-
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <p>Will appear in next version</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <div class="form-group">
                         <div class="col-lg-4 t-a-l">
-                            <button type="button" class="btn btn-primary">Test</button>
+                            <button type="button" class="btn btn-primary" id="test_connection">Test</button>
                         </div>
                         <div class="col-lg-6 t-a-r">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                         </div>
                         <div class="col-lg-2">
-                            <button type="button" class="btn btn-primary">Connect</button>
+                            <button type="button" class="btn btn-primary" id="button_connect">Connect</button>
                         </div>
                     </div>
                 </div>

@@ -12,13 +12,12 @@ MongoWebClient.module("NavigationPanel", function (NavigationPanel, ContactManag
             MongoWebClient.manual = new MongoWebClient.MainRegion.ManualShow();
 
             MongoWebClient.mainRegion.show(MongoWebClient.manual);
+
+            MongoWebClient.navigationPanelView.on("event:mwc_showManual",function(){
+                MongoWebClient.navigationPanelView.removeActive();
+                MongoWebClient.mainRegion.show(MongoWebClient.manual);
+            });
+
         }
     };
-    NavigationPanel.on("nav:showManual",function(){
-        MongoWebClient.navigationPanelView.removeActive();
-        MongoWebClient.mainRegion.show(MongoWebClient.manual);
-    });
-    NavigationPanel.on("nav:showDCM",function(){
-        MongoWebClient.DatabaseConnection.trigger("dmc:showDialog");
-    });
 });

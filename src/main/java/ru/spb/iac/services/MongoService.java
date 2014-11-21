@@ -1,7 +1,7 @@
 package ru.spb.iac.services;
 
-import org.springframework.data.mongodb.core.query.*;
-import ru.spb.iac.exceptions.*;
+import com.mongodb.*;
+import ru.spb.iac.exceptions.MongoException;
 import ru.spb.iac.ui.model.*;
 
 import java.util.*;
@@ -10,12 +10,15 @@ import java.util.*;
  * @author ismakaev
  *         Date: 10.10.14
  */
-//TODO check it (m.sekushin)
 public interface MongoService {
+    /**
+     * saves selected object to collection, mention that collection name in mongo address is strictly required
+     * @param mongoAddress address of mongo collection
+     * @param obj to save
+     * @throws MongoException is thrown if collection name or database name doesn't exist
+     */
     public void save(MongoAddress mongoAddress, Object obj) throws MongoException;
-    public void update(MongoAddress mongoAddress, Update update);
-    public List<Object> find(MongoAddress mongoAddress, Query query) throws MongoException;
-    public List<Object> findAll(MongoAddress mongoAddress) throws MongoException;
-    public Object findOne(MongoAddress mongoAddress, Query query) throws MongoException;
-    public boolean remove(MongoAddress mongoAddress, Query query);
+    public List<DBObject> findAll(MongoAddress mongoAddress) throws MongoException;
+    public List<DBObject> find(MongoAddress mongoAddress, BasicDBObject query) throws MongoException;
+    public DBObject findOne(MongoAddress mongoAddress, BasicDBObject query) throws MongoException;
 }

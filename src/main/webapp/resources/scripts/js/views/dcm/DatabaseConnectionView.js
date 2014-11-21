@@ -6,7 +6,17 @@ MongoWebClient.module("DatabaseConnection", function (DatabaseConnection, Contac
         template:null,
         tagName:"div",
         className:"container-fluid",
-        initialize:function(){
+        triggers:{
+            "click #test_connection":"event:test-connection",
+            "click #button_connect":"event:create_db_connection"
+        },
+        events:{
+          "change #m_c_name": "change_m_c_name",
+          "change #m_c_host": "change_m_c_host",
+          "change #m_c_port": "change_m_c_port"
+        },
+        initialize:function(opt){
+            this.model = opt;
             this.template = Handlebars.compile($("#dmc-modal-dialog").html());
         },
         showDialog: function(){
@@ -14,6 +24,18 @@ MongoWebClient.module("DatabaseConnection", function (DatabaseConnection, Contac
         },
         closeDialog: function(){
             this.$el.find('.modal').modal('close');
+        },
+        change_m_c_name: function(evt){
+            console.log(evt.currentTarget.value);
+            this.model.set("name",evt.currentTarget.value);
+        },
+        change_m_c_host: function(evt){
+            console.log(evt.currentTarget.value);
+            this.model.set("host",evt.currentTarget.value);
+        },
+        change_m_c_port: function(evt){
+            console.log(evt.currentTarget.value);
+            this.model.set("port",evt.currentTarget.value);
         }
     });
 });

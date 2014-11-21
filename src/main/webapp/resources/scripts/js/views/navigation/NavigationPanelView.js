@@ -6,26 +6,24 @@ MongoWebClient.module("NavigationPanel", function (NavigationPanel, ContactManag
         template:null,
         tagName:"div",
         className:"container-fluid",
-        events: {
-            "click #create-connection": "createMongoConnection",
-            "click #mWcAppName": "showManual"
-
+        triggers: {
+            "click #mWcAppName": "event:mwc_showManual"
+        },
+        events:{
+            "click #create-connection": "createMongoConnection"
         },
         initialize:function(){
             this.template = Handlebars.compile(MongoWebClient.Templates.navigationPanel);
         },
         createMongoConnection: function(){
             this.addActive();
-            NavigationPanel.trigger("nav:showDCM",this);
+            this.trigger("event:showDCMDialog",this);
         },
         addActive:function(){
             $("#create-connection").addClass("active");
         },
         removeActive:function(){
             $("#create-connection").removeClass("active");
-        },
-        showManual:function(){
-            NavigationPanel.trigger("nav:showManual",this);
         }
     });
 });

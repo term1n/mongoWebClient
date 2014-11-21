@@ -1,12 +1,13 @@
 package ru.spb.iac.controller;
 
+import com.mongodb.*;
 import com.mongodb.util.*;
 import lombok.extern.log4j.*;
+import org.bson.types.*;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
-import ru.spb.iac.exceptions.*;
+import ru.spb.iac.exceptions.MongoException;
 import ru.spb.iac.services.*;
 import ru.spb.iac.ui.model.*;
 
@@ -19,7 +20,6 @@ import java.util.*;
 @Controller
 @RequestMapping("/mongo")
 @Log4j
-//TODO pick changes from interface (m.sekushin)
 public class MongoUiController extends CommonController {
 
     @Autowired
@@ -67,9 +67,7 @@ public class MongoUiController extends CommonController {
         if (hasHostPortDbNColl(address)) {
             try {
                 mongoFactory.initMap(address);
-                Query q = new Query();
-                q.fields().include("_id");
-                writeSuccessAjaxResponse(response, JSON.serialize(mongoService.find(address, q)));
+                writeSuccessAjaxResponse(response, JSON.serialize(mongoService.findAll(address)));
             } catch (MongoException e) {
                 log.error(e.getMessage(), e);
                 writeErrorAjaxResponse(response, e.getMessage());
@@ -93,9 +91,9 @@ public class MongoUiController extends CommonController {
         if (hasHostPortDbNColl(address)) {
             try {
                 mongoFactory.initMap(address);
-                Query q = new Query(Criteria.where("_id").is(objectId));
-                q.fields().exclude("_id");
-                writeSuccessAjaxResponse(response, JSON.serialize(mongoService.findOne(address, q)));
+                BasicDBObject query = new BasicDBObject();
+                query.put("_id", new ObjectId(objectId));
+                writeSuccessAjaxResponse(response, JSON.serialize(mongoService.findOne(address, query)));
             } catch (MongoException e) {
                 log.error(e.getMessage(), e);
                 writeErrorAjaxResponse(response, e.getMessage());
