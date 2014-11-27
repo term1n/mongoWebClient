@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 import ru.spb.iac.exceptions.MongoException;
 import ru.spb.iac.services.*;
-import ru.spb.iac.ui.model.*;
+import ru.spb.iac.ui.models.*;
 
 import java.util.*;
 
@@ -51,6 +51,16 @@ public class MongoServiceImpl implements MongoService {
         if (!Strings.isNullOrEmpty(mongoAddress.getDbName()) && !Strings.isNullOrEmpty(mongoAddress.getCollName())) {
             DBCollection collection = mongoTemplateFactory.getOperationsTemplate(mongoAddress).getCollection(mongoAddress.getCollName());
             return basicOperations.getCursorBody(collection.find(query));
+        } else {
+            throw new MongoException("No collection name of database name specified");
+        }
+    }
+
+    @Override
+    public List<DBObject> find(MongoAddress mongoAddress, BasicDBObject query,BasicDBObject fields) throws MongoException {
+        if (!Strings.isNullOrEmpty(mongoAddress.getDbName()) && !Strings.isNullOrEmpty(mongoAddress.getCollName())) {
+            DBCollection collection = mongoTemplateFactory.getOperationsTemplate(mongoAddress).getCollection(mongoAddress.getCollName());
+            return basicOperations.getCursorBody(collection.find(query,fields));
         } else {
             throw new MongoException("No collection name of database name specified");
         }

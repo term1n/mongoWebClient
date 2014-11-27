@@ -3,7 +3,8 @@ package ru.spb.iac.controller;
 import com.google.common.base.*;
 import com.google.gson.*;
 import lombok.extern.log4j.*;
-import ru.spb.iac.ui.model.*;
+import ru.spb.iac.ui.*;
+import ru.spb.iac.ui.models.*;
 
 import javax.servlet.http.*;
 import java.io.*;
@@ -40,7 +41,7 @@ public abstract class CommonController {
         try {
             enableAjaxSupport(response);
             response.setContentLength(temp.getBytes().length);
-            response.getOutputStream().write(temp.getBytes());
+            response.getOutputStream().write(temp.getBytes(Charsets.UTF_8));
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         } finally {
@@ -54,7 +55,7 @@ public abstract class CommonController {
         try {
             enableAjaxSupport(response);
             response.setContentLength(temp.getBytes().length);
-            response.getOutputStream().write(temp.getBytes());
+            response.getOutputStream().write(temp.getBytes(Charsets.UTF_8));
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         } finally {

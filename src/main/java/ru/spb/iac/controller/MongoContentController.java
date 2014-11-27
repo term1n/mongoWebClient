@@ -9,7 +9,7 @@ import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
 import ru.spb.iac.exceptions.MongoException;
 import ru.spb.iac.services.*;
-import ru.spb.iac.ui.model.*;
+import ru.spb.iac.ui.models.*;
 
 import javax.servlet.http.*;
 import java.util.*;
@@ -20,7 +20,7 @@ import java.util.*;
 @Controller
 @RequestMapping("/mongo")
 @Log4j
-public class MongoUiController extends CommonController {
+public class MongoContentController extends CommonController {
 
     @Autowired
     @Qualifier("mongoService")
@@ -67,7 +67,7 @@ public class MongoUiController extends CommonController {
         if (hasHostPortDbNColl(address)) {
             try {
                 mongoFactory.initMap(address);
-                writeSuccessAjaxResponse(response, JSON.serialize(mongoService.findAll(address)));
+                writeSuccessAjaxResponse(response, JSON.serialize(mongoService.find(address,new BasicDBObject(),new BasicDBObject("_id",true))));
             } catch (MongoException e) {
                 log.error(e.getMessage(), e);
                 writeErrorAjaxResponse(response, e.getMessage());

@@ -1,7 +1,7 @@
 /**
  * Created by manaev on 17.10.14.
  */
-MongoWebClient.module("Templates", function (Templates, ContactManager, Backbone, Marionette, $, _) {
+MongoWebClient.module("Templates", function (Templates, MongoWebClient, Backbone, Marionette, $, _) {
 //Finally, all templates should appear only here
     Templates.navigationPanel = [
         "<div class='navbar-header'>",

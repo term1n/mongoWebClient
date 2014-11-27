@@ -7,9 +7,10 @@ import org.springframework.data.mongodb.core.*;
 import org.springframework.stereotype.*;
 import ru.spb.iac.exceptions.MongoException;
 import ru.spb.iac.services.*;
-import ru.spb.iac.ui.model.MongoAddress;
+import ru.spb.iac.ui.models.MongoAddress;
 import ru.spb.iac.utils.*;
 
+import java.net.*;
 import java.util.*;
 
 /**
@@ -40,6 +41,22 @@ public class MongoTemplateFactoryImpl implements MongoTemplateFactory {
 
     public void setTemplatesMap(Map<String, Map<String, MongoOperations>> templatesMap) {
         this.templatesMap = templatesMap;
+    }
+
+    @Override
+    public boolean testConnection(MongoAddress mongoAddress) throws MongoException {
+        MongoClient mongoClient = null;
+        try {
+            mongoClient = new MongoClient(mongoAddress.getHost(), mongoAddress.getPort());
+            mongoClient.getDatabaseNames();
+            return true;
+        } catch (UnknownHostException e) {
+            throw new MongoException(e.getCause());
+        } finally {
+            if (mongoClient != null) {
+                mongoClient.close();
+            }
+        }
     }
 
     @Override

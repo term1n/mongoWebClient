@@ -2,7 +2,7 @@ package ru.spb.iac.services;
 
 import com.mongodb.*;
 import ru.spb.iac.exceptions.MongoException;
-import ru.spb.iac.ui.model.*;
+import ru.spb.iac.ui.models.*;
 
 import java.util.*;
 
@@ -20,5 +20,6 @@ public interface MongoService {
     public void save(MongoAddress mongoAddress, Object obj) throws MongoException;
     public List<DBObject> findAll(MongoAddress mongoAddress) throws MongoException;
     public List<DBObject> find(MongoAddress mongoAddress, BasicDBObject query) throws MongoException;
+    public List<DBObject> find(MongoAddress mongoAddress, BasicDBObject query,BasicDBObject fields) throws MongoException;
     public DBObject findOne(MongoAddress mongoAddress, BasicDBObject query) throws MongoException;
 }

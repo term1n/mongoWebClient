@@ -1,7 +1,7 @@
 /**
  * Created by manaev on 17.10.14.
  */
-MongoWebClient.module("NavigationPanel", function (NavigationPanel, ContactManager, Backbone, Marionette, $, _) {
+MongoWebClient.module("NavigationPanel", function (NavigationPanel, MongoWebClient, Backbone, Marionette, $, _) {
     NavigationPanel.Show = Marionette.ItemView.extend({
         template:null,
         tagName:"div",

@@ -1,7 +1,7 @@
 /**
  * Created by manaev on 20.10.14.
  */
-MongoWebClient.module("DatabaseConnection", function (DatabaseConnection, ContactManager, Backbone, Marionette, $, _) {
+MongoWebClient.module("DatabaseConnection", function (DatabaseConnection, MongoWebClient, Backbone, Marionette, $, _) {
     DatabaseConnection.Show = Marionette.ItemView.extend({
         template:null,
         tagName:"div",
@@ -23,18 +23,15 @@ MongoWebClient.module("DatabaseConnection", function (DatabaseConnection, Contac
             this.$el.find('.modal').modal('show');
         },
         closeDialog: function(){
-            this.$el.find('.modal').modal('close');
+            this.$el.find('.close').click();
         },
         change_m_c_name: function(evt){
-            console.log(evt.currentTarget.value);
             this.model.set("name",evt.currentTarget.value);
         },
         change_m_c_host: function(evt){
-            console.log(evt.currentTarget.value);
             this.model.set("host",evt.currentTarget.value);
         },
         change_m_c_port: function(evt){
-            console.log(evt.currentTarget.value);
             this.model.set("port",evt.currentTarget.value);
         }
     });

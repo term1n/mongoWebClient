@@ -16,8 +16,7 @@
     <script src="<c:url value="/resources/scripts/libs/backbone.marionette.js"/>"></script>
     <script src="<c:url value="/resources/scripts/libs/handlebars-v2.0.0.js"/>"></script>
     <script src="<c:url value="/resources/scripts/libs/bootstrap.3.2.0.js"/>"></script>
-    <%--<link href="<c:url value="/resources/css/bootstrap.3.2.0.css"/>" rel="stylesheet"/>--%>
-    <link href="<c:url value="/resources/css/bootstrap-dark.css"/>" rel="stylesheet"/>
+    <link href="<c:url value="/resources/css/bootstrap.3.2.0.css"/>" rel="stylesheet"/>
     <%--custom styles--%>
     <link href="<c:url value="/resources/css/mongoWebClient.css"/>" rel="stylesheet"/>
 
@@ -28,10 +27,18 @@
     <script src="<c:url value="/resources/scripts/js/views/navigation/NavigationPanelView.js"/>"></script>
     <script src="<c:url value="/resources/scripts/js/views/navigation/NavigationPanelController.js"/>"></script>
 
+    <script src="<c:url value="/resources/scripts/js/views/dialogs/CommonDialogBoxController.js"/>"></script>
+    <script src="<c:url value="/resources/scripts/js/views/dialogs/CommonDialogBoxView.js"/>"></script>
 
-    <script src="<c:url value="/resources/scripts/js/views/mainRegion/MainRegionManual.js"/>"></script>
+
     <script src="<c:url value="/resources/scripts/js/views/dcm/DatabaseConnectionView.js"/>"></script>
     <script src="<c:url value="/resources/scripts/js/views/dcm/DatabaseConnectionController.js"/>"></script>
+
+    <script src="<c:url value="/resources/scripts/js/views/database/models/DatabaseCollection.js"/>"></script>
+    <script src="<c:url value="/resources/scripts/js/views/database/DatabaseLayout.js"/>"></script>
+    <script src="<c:url value="/resources/scripts/js/views/database/DatabaseLayoutController.js"/>"></script>
+    <script src="<c:url value="/resources/scripts/js/views/database/parts/DatabaseView.js"/>"></script>
+    <script src="<c:url value="/resources/scripts/js/views/entity/CollectionEntity.js"/>"></script>
 
 
 </head>

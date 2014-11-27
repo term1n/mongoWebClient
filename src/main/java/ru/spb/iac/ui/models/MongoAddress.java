@@ -1,4 +1,4 @@
-package ru.spb.iac.ui.model;
+package ru.spb.iac.ui.models;
 
 /**
  * @author ismakaev

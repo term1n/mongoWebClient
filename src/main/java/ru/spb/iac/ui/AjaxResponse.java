@@ -1,4 +1,4 @@
-package ru.spb.iac.ui.model;
+package ru.spb.iac.ui;
 
 /**
  * Created by manaev on 10.10.14.
@@ -12,10 +12,6 @@ public class AjaxResponse {
     private String status;
     private Object errors;
     private Object model;
-
-    public AjaxResponse(String status) {
-        this(status, null, null);
-    }
 
     public AjaxResponse(Object errors, Object model) {
         this(STATUS_FAILED, errors, model);

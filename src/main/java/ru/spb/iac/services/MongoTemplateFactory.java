@@ -2,7 +2,7 @@ package ru.spb.iac.services;
 
 import org.springframework.data.mongodb.core.*;
 import ru.spb.iac.exceptions.*;
-import ru.spb.iac.ui.model.*;
+import ru.spb.iac.ui.models.*;
 
 import java.util.*;
 
@@ -11,6 +11,15 @@ import java.util.*;
  *         Date: 10.10.14
  */
 public interface MongoTemplateFactory {
+
+    /**
+     * test if there is chance to connect to selected host-port
+     * @param mongoAddress address of database to connect
+     * @return true if there is a connection
+     * @throws MongoException if connection is not available
+     */
+    public boolean testConnection(MongoAddress mongoAddress) throws MongoException;
+
     /**
      * init MongoOperation's class instances for each database for the specified host and port of the mongodb
      * @param mongoAddress MongoAddress, host and port strictly required
