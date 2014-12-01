@@ -38,6 +38,13 @@
     <li><a tabindex="-1" href="#" class="dropCollection">Drop collection</a></li>
 </ul>
 
+<ul class="dropdown-menu" id="entry-menu-placeholder" role="menu" style="display:none">
+    <li><a tabindex="-1" href="#" class="editEntry">Edit entry</a></li>
+    <li><a tabindex="-1" href="#" class="viewEntry">View entry</a></li>
+    <li class="divider"></li>
+    <li><a tabindex="-1" href="#" class="deleteEntry">Delete entry</a></li>
+</ul>
+
 <script type="text/x-handlebars-template" id="dmc-modal-dialog">
     <div class="modal fade dmcModal">
         <div class="modal-dialog">
@@ -155,12 +162,65 @@
     </div>
 </script>
 
+<script type="text/x-handlebars-template" id="database-collection-attributes-view-template">
+    <div class="panel-body">
+        {{host}}:{{port}} {{dbName}} {{collName}} TODO PICTURES AND STYLES
+    </div>
+</script>
+
 <script type="text/x-handlebars-template" id="database-layout-template">
     <div class="row">
         <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3 .col-md-offset-0 .col-xs-offset-0 .col-sm-offset-0 .col-lg-offset-0"
              id="dlLeft">
         </div>
         <div class="col-md-9 col-xs-9 col-sm-9 col-lg-9" id="dlRight">
+        </div>
+    </div>
+</script>
+
+<script type="text/x-handlebars-template" id="database-console-template">
+    <div class="panel-body st_console">
+       !!!Console will be HERE TODO!!!
+    </div>
+</script>
+
+<script type="text/x-handlebars-template" id="database-content-view-template">
+    <div class="contentViewHeader list-group" style="margin-bottom:0;">
+        <a class="list-group-item collection-element-id-view">ObjectId("{{_id.$oid}}")</a>
+    </div>
+    <div class="contentViewBody hidden">
+
+    </div>
+</script>
+
+<script type="text/x-handlebars-template" id="database-content-view-holder-empty-template">
+    <span style="font-weight:bold">
+        Script executed successfully, but there is no results to show
+    </span>
+</script>
+
+<script type="text/x-handlebars-template" id="database-content-layout-template">
+    <div class="row" role="tabpanel">
+        <ul class="nav nav-tabs" role="tablist" id="dbContent-tab-panel" style="border-bottom:0;">
+
+        </ul>
+        <div class="tab-content" id="dbContent-tab-content">
+        </div>
+    </div>
+</script>
+
+<script type="text/x-handlebars-template" id="database-tab-control-template">
+    <li role="presentation" class="active"><a href="#{{contentId}}" aria-controls="home" role="tab" data-toggle="tab">{{tabName}}</a>
+    </li>
+</script>
+
+<script type="text/x-handlebars-template" id="database-content-template">
+    <div class="container-fluid">
+        <div class="attributes row">
+        </div>
+        <div class="console row">
+        </div>
+        <div class="content row">
         </div>
     </div>
 </script>

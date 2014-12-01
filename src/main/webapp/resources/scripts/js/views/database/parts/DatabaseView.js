@@ -15,10 +15,11 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             var rData = {
                 host:this.model.collection.requestData.host,
                 port:this.model.collection.requestData.port,
+                name:this.model.collection.requestData.name,
                 collName:evt.currentTarget.innerHTML,
                 dbName:this.model.get("dbName")
             };
-            $("#context-menu-placeholder").show().css({ position: "absolute",left: this.locate(evt).left,top: this.locate(evt).top}).off('click')
+            $("#context-menu-placeholder").show().css({ position: "absolute",left: MongoWebClient.locate(evt).left,top: MongoWebClient.locate(evt).top}).off('click')
                 .mouseleave(function(){$(this).hide();})
                 .on('click',rData,this.clickCollectionMenuItem);
         },
@@ -42,22 +43,6 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
                 console.log("refreshDatabase");
             }
         },
-        locate:function(event){
-            var eventDoc, doc, body;
-            event = event || window.event; // IE-ism
-            if (event.pageX == null && event.clientX != null) {
-                eventDoc = (event.target && event.target.ownerDocument) || document;
-                doc = eventDoc.documentElement;
-                body = eventDoc.body;
-                event.pageX = event.clientX +
-                    (doc && doc.scrollLeft || body && body.scrollLeft || 0) -
-                    (doc && doc.clientLeft || body && body.clientLeft || 0);
-                event.pageY = event.clientY +
-                    (doc && doc.scrollTop  || body && body.scrollTop  || 0) -
-                    (doc && doc.clientTop  || body && body.clientTop  || 0 );
-            }
-            return {top:event.pageY-5,left:event.pageX-5}
-        },
         fireMenuDatabase: function (evt) {
             evt.preventDefault();
             var rData = {
@@ -65,7 +50,7 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
                 port:this.model.collection.requestData.port,
                 dbName:this.model.get("dbName")
             };
-            $("#database-menu-placeholder").show().css({ position: "absolute",left: this.locate(evt).left,top: this.locate(evt).top})
+            $("#database-menu-placeholder").show().css({ position: "absolute",left: MongoWebClient.locate(evt).left,top: MongoWebClient.locate(evt).top})
                 .off('click').mouseleave(function(){$(this).hide();})
                 .on('click',rData,this.clickDatabaseMenuItem);
         },

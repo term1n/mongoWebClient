@@ -5,10 +5,11 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
 
     DatabaseLayout.ConnectionCollection = Backbone.Model.extend({
         addConnection:function(opt){
-            var temp = new DatabaseLayout.DatabaseCollection(opt);
+            var tOpt = JSON.parse(JSON.stringify(opt));
+            var temp = new DatabaseLayout.DatabaseCollection(tOpt);
             temp.fetch();
             /*for bootstrap accordion href working properly*/
-            temp.each(function(model){model.set("dataParent","child"+opt.name)});
+            temp.each(function(model){model.set("dataParent","child"+tOpt.name)});
             this.models.push(temp);
         },
         initialize:function(){
@@ -39,6 +40,7 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
                 success:function(collection, response, options){
                     if(response.status == "FAILED"){
                         MongoWebClient.trigger("event:showErrorDialog",{modalHeader:"Error",modalBody:response.model});
+
                     }else{
                         MongoWebClient.trigger("event:closeDMCDialog",this);
                     }

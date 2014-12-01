@@ -14,7 +14,10 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
         },
         onShow: function() {
             this.leftMenu.show(new DatabaseLayout.ConnectionsView({collection:this.collection}));
-            this.rightMenu.show();
+        },
+        showCollectionEntry: function(collection){
+            this.rightMenu.show(new DatabaseLayout.ContentHolder({collection : collection}));
+            MongoWebClient.dbContentLayout = this.rightMenu.currentView;
         }
     });
     DatabaseLayout.ConnectionsView = Backbone.Marionette.LayoutView.extend({

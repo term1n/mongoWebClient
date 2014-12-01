@@ -4,7 +4,7 @@
 MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient, Backbone, Marionette, $, _) {
     DatabaseLayout.Controller= {
         showDatabaseLayout: function(){
-            MongoWebClient.databaseLayout = new MongoWebClient.DatabaseLayout.Layout({collection:MongoWebClient.databaseConnectionsCollection});
+            MongoWebClient.databaseLayout = new DatabaseLayout.Layout({collection:MongoWebClient.databaseConnectionsCollection});
             MongoWebClient.mainRegion.show(MongoWebClient.databaseLayout);
         },
         addConnection:function(opt){
@@ -14,6 +14,9 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
                 MongoWebClient.databaseConnectionsCollection = new DatabaseLayout.ConnectionCollection();
                 MongoWebClient.databaseConnectionsCollection.addConnection(opt);
             }
+        },
+        showCollectionEntry: function(collection){
+           MongoWebClient.databaseLayout.showCollectionEntry(collection);
         }
     };
 });

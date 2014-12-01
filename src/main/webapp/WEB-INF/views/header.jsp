@@ -38,7 +38,10 @@
     <script src="<c:url value="/resources/scripts/js/views/database/DatabaseLayout.js"/>"></script>
     <script src="<c:url value="/resources/scripts/js/views/database/DatabaseLayoutController.js"/>"></script>
     <script src="<c:url value="/resources/scripts/js/views/database/parts/DatabaseView.js"/>"></script>
-    <script src="<c:url value="/resources/scripts/js/views/entity/CollectionEntity.js"/>"></script>
+    <script src="<c:url value="/resources/scripts/js/views/database/models/CollectionEntity.js"/>"></script>
+    <script src="<c:url value="/resources/scripts/js/views/database/parts/DbContentLayoutController.js"/>"></script>
+    <script src="<c:url value="/resources/scripts/js/views/database/parts/DbContentView.js"/>"></script>
+    <script src="<c:url value="/resources/scripts/js/views/database/parts/DbContentLayout.js"/>"></script>
 
 
 </head>
