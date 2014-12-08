@@ -7,10 +7,14 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
         addConnection:function(opt){
             var tOpt = JSON.parse(JSON.stringify(opt));
             var temp = new DatabaseLayout.DatabaseCollection(tOpt);
-            temp.fetch();
-            /*for bootstrap accordion href working properly*/
-            temp.each(function(model){model.set("dataParent","child"+tOpt.name)});
-            this.models.push(temp);
+            if(temp.fetch()){
+                /*for bootstrap accordion href working properly*/
+                temp.each(function(model){model.set("dataParent","child"+tOpt.name)});
+                this.models.push(temp);
+                return true;
+            } else{
+                return false;
+            }
         },
         initialize:function(){
             this.models = [];
@@ -29,16 +33,19 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             this.connectionName = opt.name;
         },
         fetch: function () {
+            var success = true;
             Backbone.Collection.prototype.fetch.call(this, {
                 reset: true,
                 type: "GET",
                 data: this.requestData,
                 async: false,
                 error:function(){
+                    success = false;
                     MongoWebClient.trigger("event:showErrorDialog",{modalHeader:"Error",modalBody:"Can't establish connection"});
                 },
                 success:function(collection, response, options){
                     if(response.status == "FAILED"){
+                        success = false;
                         MongoWebClient.trigger("event:showErrorDialog",{modalHeader:"Error",modalBody:response.model});
 
                     }else{
@@ -46,6 +53,7 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
                     }
                 }
             });
+            return success;
         },
         parse: function (response, options) {
             return response.model;

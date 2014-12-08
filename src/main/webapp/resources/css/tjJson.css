@@ -1,0 +1,42 @@
+.tjJson-child-container {
+    list-style-type: none;
+    margin-left: 1em;
+}
+.tjJson-key {
+    font-weight: bold;
+    color: #000000;
+    margin-right: 4px;
+    margin-left: 10px;
+}
+
+.tjJson-value {
+    font-weight: bold;
+    color: #000000;
+    margin-right: 4px;
+    margin-left: 0 !important;
+}
+
+.tjJson-label {
+    font-weight: bold;
+    color: dimgrey;
+}
+
+.tjJson-string {
+    color: indianred;
+}
+.tjJson-string-short {
+    color: indianred;
+}
+
+.tjJson-number {
+    color: royalblue;
+}
+.hoverable:hover{
+    cursor: pointer;
+}
+.glyphicon:hover {
+    -webkit-transform: scale(1.05);
+    -ms-transform: scale(1.05);
+    transform: scale(1.05);
+    cursor: pointer;
+}

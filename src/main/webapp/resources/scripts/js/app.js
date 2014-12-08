@@ -32,8 +32,9 @@ MongoWebClient.on("event:viewCollection", function (data) {
 });
 
 MongoWebClient.on("event:showDatabaseLayout", function (data) {
-    MongoWebClient.DatabaseLayout.Controller.addConnection(data);
-    MongoWebClient.DatabaseLayout.Controller.showDatabaseLayout();
+    if(MongoWebClient.DatabaseLayout.Controller.addConnection(data)){
+        MongoWebClient.DatabaseLayout.Controller.showDatabaseLayout();
+    }
 });
 MongoWebClient.locate=function(event){
     var eventDoc, doc, body;

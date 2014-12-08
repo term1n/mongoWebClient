@@ -15,7 +15,9 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             var temp = JSON.parse(JSON.stringify(this.model.collection.requestData));
             temp["id"] = this.model.attributes["_id"]["$oid"];
             var solo = new DatabaseLayout.CollectionEntity().fetch(temp);
-            this.$el.find(".contentViewBody").html("").append(JSON.stringify(solo.attributes)).toggleClass("hidden");
+            this.$el.find(".contentViewBody").html("").toggleClass("hidden");
+            this.$el.find(".contentViewBody").tjJson({data:solo.attributes});
+
         },
         fireContextMenu:function(evt){
             var self = this;

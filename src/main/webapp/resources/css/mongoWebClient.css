@@ -80,3 +80,19 @@ body {
     border-top-left-radius: 0;
     border-bottom-right-radius: 0;
 }
+.contentViewBody ul {
+    margin-left: 1em;
+}
+
+.contentViewBody .json-key {
+    font-weight: bold;
+}
+
+.contentViewBody .ui-icon {
+    float:left;
+    margin-right:3px;
+}
+
+.contentViewBody .childless {
+    margin-left:18px;
+}
