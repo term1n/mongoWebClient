@@ -92,12 +92,21 @@
                 "click .hoverable": "doToggle"
             },
             doToggle: function (evt) {
-                this.$el.find(".tjJson-string").first().toggle("hide");
-                this.$el.find(".tjJson-string-short").first().toggle("hide");
+                if(this.$el.find(".tjJson-string").first().is(':visible')){
+                    this.$el.find(".tjJson-string").first().hide();
+                }else{
+                    this.$el.find(".tjJson-string").first().show();
+                }
+
+                if(this.$el.find(".tjJson-string-short").first().is(':visible')){
+                    this.$el.find(".tjJson-string-short").first().hide();
+                }else{
+                    this.$el.find(".tjJson-string-short").first().show();
+                }
                 evt.stopPropagation();
             },
             initialize: function () {
-                this.template = Handlebars.compile("{{#if prop}}<span class='tjJson-value hoverable'> {{prop}}: </span>{{/if}}<span class='tjJson-string' style='display: none'> {{data}}</span><span class='tjJson-string-short'>{{#cutter data 'longer' 100}}{{this}}{{/cutter}}</span>");
+                this.template = Handlebars.compile("{{#if prop}}<span class='tjJson-value hoverable'> {{prop}}: </span>{{/if}}<span class='tjJson-string' style='display: none'> {{data}}</span><span class='tjJson-string-short hoverable'>{{#cutter data 'longer' 100}}{{this}}{{/cutter}}</span>");
             },
             render: function () {
                 this.$el.append(this.template(this.model));
@@ -124,7 +133,7 @@
                 tjJsonApp.defineView($li, data[prop], prop);
                 $ul.append($li);
             }
-            $container.append($ul);
+            $container.html("").append($ul);
         };
         tjJsonApp.start(this, data);
     };

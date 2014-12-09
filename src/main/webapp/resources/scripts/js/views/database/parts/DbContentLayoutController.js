@@ -9,6 +9,9 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             } else {
                 DatabaseLayout.Controller.showCollectionEntry(new DatabaseLayout.LayoutViewCollection(new DatabaseLayout.LayoutViewEntity(data)));
             }
+        } ,
+        removeView: function(view){
+            MongoWebClient.dbContentLayout.removeChildView(view);
         }
     }
 });

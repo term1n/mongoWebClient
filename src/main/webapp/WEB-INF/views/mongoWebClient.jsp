@@ -186,7 +186,7 @@
 
 <script type="text/x-handlebars-template" id="database-content-view-template">
     <div class="contentViewHeader list-group" style="margin-bottom:0;">
-        <a class="list-group-item collection-element-id-view">ObjectId("{{_id.$oid}}")</a>
+        <a class="list-group-item collection-element-id-view hoverable">ObjectId("{{_id.$oid}}")</a>
     </div>
     <div class="contentViewBody hidden">
 
@@ -210,7 +210,7 @@
 </script>
 
 <script type="text/x-handlebars-template" id="database-tab-control-template">
-    <li role="presentation" class="active"><a href="#{{contentId}}" aria-controls="home" role="tab" data-toggle="tab">{{tabName}}</a>
+    <li role="presentation" class="active"><a href="#{{contentId}}" class="{{contentId}}" aria-controls="home" role="tab" data-toggle="tab"><button class="close" type="button"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>{{tabName}}</a>
     </li>
 </script>
 

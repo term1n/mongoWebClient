@@ -42,6 +42,15 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             this.consoleEl.show(new DatabaseLayout.ConsoleView());
             this.attributesEl.show(new DatabaseLayout.AttributesView(new DatabaseLayout.Entity(this.model.attributes)));
             this.contentEl.show(new DatabaseLayout.ContentViewHolder({collection:new DatabaseLayout.CollectionEntities(this.model.attributes).fetch()}));
+            var elem = this;
+            var selector = "." + this.model.attributes.contentId + " .close";
+            $("#dbContent-tab-panel").on("click", selector,{elem:this},this.doClose);
+        },
+        doClose: function(evt){
+            DatabaseLayout.ContentControllerLayout.removeView(evt.data.elem);
+            evt.data.elem.destroy();
+            evt.currentTarget.parentNode.parentNode.remove();
+            $("#dbContent-tab-panel").find('li a').first().click();
         }
     });
 
@@ -54,7 +63,7 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             this.template = Handlebars.compile($("#database-content-layout-template").html());
         },
         onBeforeAddChild:function(childView){
-            var temp = childView.model.get("name")+"_"+childView.model.get("dbName")+"_"+childView.model.get("collName")+"_"+Date.now();
+            var temp = childView.model.get("name")+"_"+childView.model.get("dbName")+"_"+childView.model.get("collName").replace(".","_")+"_"+Date.now();
             childView.model.set("contentId",temp);
         }
     });
