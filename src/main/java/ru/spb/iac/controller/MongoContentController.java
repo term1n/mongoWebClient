@@ -1,5 +1,6 @@
 package ru.spb.iac.controller;
 
+import com.google.common.base.*;
 import com.mongodb.*;
 import com.mongodb.util.*;
 import lombok.extern.log4j.*;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
 import ru.spb.iac.exceptions.MongoException;
 import ru.spb.iac.services.*;
+import ru.spb.iac.ui.*;
 import ru.spb.iac.ui.models.*;
 
 import javax.servlet.http.*;
@@ -68,6 +70,25 @@ public class MongoContentController extends CommonController {
             try {
                 mongoFactory.initMap(address);
                 writeSuccessAjaxResponse(response, JSON.serialize(mongoService.find(address,new BasicDBObject(),new BasicDBObject("_id",true))));
+            } catch (MongoException e) {
+                log.error(e.getMessage(), e);
+                writeErrorAjaxResponse(response, e.getMessage());
+            }
+        } else {
+            writeErrorAjaxResponse(response, "Host or port or database or collection is undefined");
+        }
+    }
+
+    @RequestMapping(value = "/updateEntity", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+    public
+    @ResponseBody
+    void updateEntity(MongoAddress address, @RequestParam(value = "dbObject") String dbObject,  HttpServletResponse response) {
+        if (hasHostPortDbNColl(address) && !Strings.isNullOrEmpty(dbObject)) {
+            try {
+                mongoFactory.initMap(address);
+                DBObject temp = (DBObject)JSON.parse(dbObject);
+                mongoService.save(address,temp);
+                writeSuccessAjaxResponse(response,new AjaxResponse("SUCCESS"));
             } catch (MongoException e) {
                 log.error(e.getMessage(), e);
                 writeErrorAjaxResponse(response, e.getMessage());

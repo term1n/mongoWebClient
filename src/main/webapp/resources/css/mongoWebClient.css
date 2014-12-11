@@ -88,3 +88,50 @@ body {
     margin: -2px 0 0 10px;
     font-size: 18px;
 }
+.mwc-modal-lg{
+    width:98%;
+    height:98%;
+}
+.mwc-wrap{
+    overflow-y: scroll;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+}
+
+.mwc-edit-sm-h{
+    height: 600px;
+}
+
+.modal-header .maximize {
+    margin-right: 10px;
+    margin-top: 1px;
+}
+
+.maximize {
+    float: right;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    filter: alpha(opacity=20);
+    opacity: .2
+}
+
+.maximize:hover, .maximize:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+    filter: alpha(opacity=50);
+    opacity: .5
+}
+
+button.maximize {
+    -webkit-appearance: none;
+    padding: 0;
+    cursor: pointer;
+    background: 0 0;
+    border: 0
+}

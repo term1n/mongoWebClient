@@ -7,7 +7,8 @@ MongoWebClient.addRegions({
     connectionManagerRegion: "#database-connection-manager",
     mainRegion: "#main-region",
     navigationRegion: "#navigation-panel",
-    dialogsRegion: "#common-dialogs-div"
+    dialogsRegion: "#common-dialogs-div",
+    eEditRegion: "#edit-entry-dialog-div"
 
 });
 MongoWebClient.on("start", function () {

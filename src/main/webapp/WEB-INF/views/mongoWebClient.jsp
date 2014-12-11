@@ -27,6 +27,10 @@
 <div id="common-dialogs-div">
 </div>
 
+<%--div for editing dialog--%>
+<div id="edit-entry-dialog-div">
+</div>
+
 <ul class="dropdown-menu" id="database-menu-placeholder" role="menu" style="display:none">
     <li><a tabindex="-1" href="#" class="refreshDatabase">Refresh database</a></li>
     <li class="divider"></li>
@@ -107,7 +111,7 @@
                 <div class="modal-footer">
                     <div class="form-group">
                         <div class="col-lg-4 t-a-l">
-                            <button type="button" class="btn btn-primary" id="test_connection">Test</button>
+                            <button type="button" class="btn btn-info" id="test_connection">Test</button>
                         </div>
                         <div class="col-lg-6 t-a-r">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -121,6 +125,39 @@
             <!-- /.modal-content -->
         </div>
         <!-- /.modal-dialog -->
+    </div>
+</script>
+
+<script type="text/x-handlebars-template" id="edit-entry-modal-dialog">
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
+        <div class="modal-dialog modal-lg mwc-modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <button type="button" class="maximize" aria-hidden="true">&curren;</button>
+                    <h4 class="modal-title">Edit entry id:  <span style="font-weight:bold">{{header}}</span></h4>
+                </div>
+                <div class="modal-body t-a-l">
+                    <pre class="mwc-wrap mwc-edit-sm-h" contenteditable="true">
+                            {{json data}}
+                    </pre>
+                </div>
+                <div class="modal-footer">
+                    <div class="form-group">
+                        <div class="col-lg-4 t-a-l">
+                            <button type="button" class="btn btn-info btn-lg validate">Validate
+                            </button>
+                        </div>
+                        <div class="col-lg-6 t-a-r">
+                            <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">Cancel</button>
+                        </div>
+                        <div class="col-lg-2">
+                            <button type="button" class="btn btn-danger save btn-lg">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </script>
 
@@ -142,6 +179,8 @@
         </div>
     </div>
 </script>
+
+
 
 <script type="text/x-handlebars-template" id="common-error-modal-dialog">
     <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="smallModal" aria-hidden="true">
