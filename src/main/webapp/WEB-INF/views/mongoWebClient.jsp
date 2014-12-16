@@ -27,6 +27,10 @@
 <div id="common-dialogs-div">
 </div>
 
+<%--div for common dialogs--%>
+<div id="confirm-dialog-div">
+</div>
+
 <%--div for editing dialog--%>
 <div id="edit-entry-dialog-div">
 </div>
@@ -135,7 +139,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <button type="button" class="maximize" aria-hidden="true">&curren;</button>
-                    <h4 class="modal-title">Edit entry id:  <span style="font-weight:bold">{{header}}</span></h4>
+                    <h4 class="modal-title">Edit entry id: <span style="font-weight:bold">{{header}}</span></h4>
                 </div>
                 <div class="modal-body t-a-l">
                     <pre class="mwc-wrap mwc-edit-sm-h" contenteditable="true">
@@ -180,6 +184,35 @@
     </div>
 </script>
 
+<script type="text/x-handlebars-template" id="common-confirm-modal-dialog">
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="smallModal" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content panel-warning">
+                <div class="modal-header panel-heading modal-header-confirm">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">{{modalHeader}}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        {{modalBodyText}}
+                        <span class="alert-danger">{{modalBodyDanger}} </span>
+                        ?
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-lg-6 t-a-l">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                    </div>
+                    <div class="col-lg-6 t-a-r">
+                        <button type="button" class="btn btn-warning btn-yes">Yes</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
 
 
 <script type="text/x-handlebars-template" id="common-error-modal-dialog">
@@ -203,7 +236,7 @@
 
 <script type="text/x-handlebars-template" id="database-collection-attributes-view-template">
     <div class="panel-body">
-        {{host}}:{{port}} {{dbName}} {{collName}} TODO PICTURES AND STYLES
+        <span class="fa fa-desktop padding-lr-5"></span> {{host}}:{{port}} <span class="fa fa-database padding-lr-5"> </span> {{dbName}} <span class="fa fa-folder-o padding-lr-5"></span> {{collName}} <span class="verticalLine"></span>  <span class="fa fa-refresh padding-lr-5 hoverable-scale"> Refresh</span>
     </div>
 </script>
 
@@ -219,7 +252,7 @@
 
 <script type="text/x-handlebars-template" id="database-console-template">
     <div class="panel-body st_console">
-       !!!Console will be HERE TODO!!!
+        !!!Console will be HERE TODO!!!
     </div>
 </script>
 
@@ -249,7 +282,11 @@
 </script>
 
 <script type="text/x-handlebars-template" id="database-tab-control-template">
-    <li role="presentation" class="active"><a href="#{{contentId}}" class="{{contentId}}" aria-controls="home" role="tab" data-toggle="tab"><button class="close" type="button"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>{{tabName}}</a>
+    <li role="presentation" class="active"><a href="#{{contentId}}" class="{{contentId}}" aria-controls="home"
+                                              role="tab" data-toggle="tab">
+        <button class="close" type="button"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        {{tabName}}</a>
     </li>
 </script>
 

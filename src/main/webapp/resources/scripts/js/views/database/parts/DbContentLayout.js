@@ -42,9 +42,13 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             this.consoleEl.show(new DatabaseLayout.ConsoleView());
             this.attributesEl.show(new DatabaseLayout.AttributesView(new DatabaseLayout.Entity(this.model.attributes)));
             this.contentEl.show(new DatabaseLayout.ContentViewHolder({collection:new DatabaseLayout.CollectionEntities(this.model.attributes).fetch()}));
-            var elem = this;
+            var self = this;
+            this.listenTo( this.attributesEl.currentView,"event:refreshView",function(){self.refreshView()});
             var selector = "." + this.model.attributes.contentId + " .close";
             $("#dbContent-tab-panel").on("click", selector,{elem:this},this.doClose);
+        },
+        refreshView:function(){
+            this.contentEl.show(new DatabaseLayout.ContentViewHolder({collection:new DatabaseLayout.CollectionEntities(this.model.attributes).fetch()}));
         },
         doClose: function(evt){
             DatabaseLayout.ContentControllerLayout.removeView(evt.data.elem);

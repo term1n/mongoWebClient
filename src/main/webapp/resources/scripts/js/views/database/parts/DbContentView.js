@@ -70,14 +70,38 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
                 evt.data.editEntry();
             }
             if ($(evt.target).hasClass("deleteEntry")) {
-                console.log("deleteEntry");
+                MongoWebClient.trigger("event:showConfirmDialog",{fCallbackTarget: evt.data,fCallbackName: "deleteEntry", modalHeader:"Confirmation", modalBodyDanger:evt.data.model.attributes["_id"]["$oid"], modalBodyText:"Delete entry"});
             }
             if ($(evt.target).hasClass("viewEntry")) {
                 evt.data.viewEntry();
             }
         },
+        deleteEntry: function(){
+            var temp = JSON.parse(JSON.stringify(this.model.collection.requestData));
+            temp["id"] = this.model.attributes["_id"]["$oid"];
+            var self = this;
+            $.ajax({
+                dataType: "json",
+                type: "GET",
+                data: temp,
+                url:"/mongoWebClient/mongo/deleteEntity",
+                success: function (data) {
+                    if (data.status === 'SUCCESS' && data.model) {
+                        self.destroy();
+                        MongoWebClient.trigger("event:showSuccessDialog",{modalHeader:"Success",modalBody:"Object deleted"})
+                    } else{
+                        MongoWebClient.trigger("event:showErrorDialog",{modalHeader:"Error",modalBody:data.model});
+                    }
+                },
+                error:function(e){
+                    MongoWebClient.trigger("event:showErrorDialog",{modalHeader:"Error",modalBody:"Internal server error"});
+                }
+            });
+        },
         initialize: function () {
             this.template = Handlebars.compile($("#database-content-view-template").html());
+            var self = this;
+            this.on("event:deleteEntry",function(){self.deleteEntry()});
         }
     });
 
@@ -94,6 +118,9 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
         template: null,
         tagName: "div",
         className: "panel panel-default attributes-view",
+        triggers:{
+        "click .fa-refresh":"event:refreshView"
+        },
         initialize: function (opt) {
             this.model = opt;
             this.template = Handlebars.compile($("#database-collection-attributes-view-template").html());
@@ -129,9 +156,9 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
         },
         bSave: function () {
             if (this.bValidate()) {
-                console.log("save");
+                this.closeDialog();
                 var dataToSend = JSON.parse(JSON.stringify(this.model.requestData));
-                dataToSend["dbObject"] =  JSON.stringify(JSON.parse(this.$el.find("pre").html()));
+                dataToSend["dbObject"] =  this.$el.find("pre").text();
                 $.ajax({
                     dataType: "json",
                     type: "POST",
@@ -144,15 +171,17 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
                             MongoWebClient.trigger("event:showErrorDialog",{modalHeader:"Error",modalBody:data.model});
                         }
                     },
-                    error:function(){
-                        console.log("error")
-                        MongoWebClient.trigger("event:showErrorDialog",{modalHeader:"Error",modalBody:"Can't establish connection"});
+                    error:function(e){
+                        MongoWebClient.trigger("event:showErrorDialog",{modalHeader:"Error",modalBody:"Internal server error"});
                     }
                 });
             }
         },
         showDialog: function(){
              this.$el.find('.modal').modal('show');
+        },
+        closeDialog: function(){
+             this.$el.find('.modal').modal('hide');
         }
     })
 

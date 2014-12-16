@@ -8,6 +8,7 @@ MongoWebClient.addRegions({
     mainRegion: "#main-region",
     navigationRegion: "#navigation-panel",
     dialogsRegion: "#common-dialogs-div",
+    confirmDialogsRegion: "#confirm-dialog-div",
     eEditRegion: "#edit-entry-dialog-div"
 
 });
@@ -30,6 +31,10 @@ MongoWebClient.on("event:closeDMCDialog", function (data) {
 
 MongoWebClient.on("event:viewCollection", function (data) {
     MongoWebClient.DatabaseLayout.ContentControllerLayout.addView(data);
+});
+
+MongoWebClient.on("event:showConfirmDialog", function (data) {
+    MongoWebClient.ConfirmationDialog.Controller.showConfirmDialog(data);
 });
 
 MongoWebClient.on("event:showDatabaseLayout", function (data) {

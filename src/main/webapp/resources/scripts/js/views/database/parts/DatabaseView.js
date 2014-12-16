@@ -8,7 +8,8 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
         className: "panel panel-default",
         events: {
             "contextmenu .list-group-item": "fireMenuCollection",
-            "contextmenu .panel-heading": "fireMenuDatabase"
+            "contextmenu .panel-heading": "fireMenuDatabase",
+            "dblclick .list-group-item": "viewDbCollection"
         },
         fireMenuCollection: function (evt) {
             evt.preventDefault();
@@ -22,6 +23,16 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             $("#context-menu-placeholder").show().css({ position: "absolute",left: MongoWebClient.locate(evt).left,top: MongoWebClient.locate(evt).top}).off('click')
                 .mouseleave(function(){$(this).hide();})
                 .on('click',rData,this.clickCollectionMenuItem);
+        },
+        viewDbCollection: function(evt){
+            var rData = {
+                host:this.model.collection.requestData.host,
+                port:this.model.collection.requestData.port,
+                name:this.model.collection.requestData.name,
+                collName:evt.currentTarget.innerHTML,
+                dbName:this.model.get("dbName")
+            };
+            MongoWebClient.trigger("event:viewCollection",rData);
         },
         clickCollectionMenuItem:function(evt){
             $(this).hide();

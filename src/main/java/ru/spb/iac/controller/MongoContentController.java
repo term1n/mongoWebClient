@@ -98,6 +98,26 @@ public class MongoContentController extends CommonController {
         }
     }
 
+    @RequestMapping(value = "/deleteEntity", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
+    public
+    @ResponseBody
+    void deleteEntity(MongoAddress address, @RequestParam(value = "id") String id,  HttpServletResponse response) {
+        if (hasHostPortDbNColl(address) && !Strings.isNullOrEmpty(id)) {
+            try {
+                mongoFactory.initMap(address);
+                BasicDBObject query = new BasicDBObject();
+                query.put("_id", new ObjectId(id));
+                mongoService.findAndRemove(address,query);
+                writeSuccessAjaxResponse(response,new AjaxResponse("SUCCESS"));
+            } catch (MongoException e) {
+                log.error(e.getMessage(), e);
+                writeErrorAjaxResponse(response, e.getMessage());
+            }
+        } else {
+            writeErrorAjaxResponse(response, "Host or port or database or collection is undefined");
+        }
+    }
+
     /**
      * get entity of the collection
      *

@@ -1,7 +1,7 @@
 <%--
   Created by IntelliJ IDEA.
   User: manaev
-  Date: 13.10.14
+  Date: 13.10.14           https://pikock.github.io/bootstrap-magic/app/index.html#!/editor
   Time: 17:57
   To change this template use File | Settings | File Templates.
 --%>
@@ -18,6 +18,7 @@
     <script src="<c:url value="/resources/scripts/libs/bootstrap.3.2.0.js"/>"></script>
     <script src="<c:url value="/resources/scripts/libs/jquery.jtJson.js"/>"></script>
     <link href="<c:url value="/resources/css/bootstrap.3.2.0.css"/>" rel="stylesheet"/>
+    <link href="<c:url value="/resources/css/font-awesome.css"/>" rel="stylesheet"/>
     <link href="<c:url value="/resources/css/tjJson.css"/>" rel="stylesheet"/>
     <%--custom styles--%>
     <link href="<c:url value="/resources/css/mongoWebClient.css"/>" rel="stylesheet"/>
@@ -31,6 +32,7 @@
 
     <script src="<c:url value="/resources/scripts/js/views/dialogs/CommonDialogBoxController.js"/>"></script>
     <script src="<c:url value="/resources/scripts/js/views/dialogs/CommonDialogBoxView.js"/>"></script>
+    <script src="<c:url value="/resources/scripts/js/views/dialogs/ConfirmationDialog.js"/>"></script>
 
 
     <script src="<c:url value="/resources/scripts/js/views/dcm/DatabaseConnectionView.js"/>"></script>
