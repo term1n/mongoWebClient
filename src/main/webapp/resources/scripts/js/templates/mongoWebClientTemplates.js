@@ -12,6 +12,9 @@ MongoWebClient.module("Templates", function (Templates, MongoWebClient, Backbone
         "<li id='create-connection'>",
         "<a class='h-cursor-pointer'>Create connection</a>",
         "</li>",
+        "<li>",
+        "</li>",
+
         "</ul>",
         "</div>"
     ].join("\n");

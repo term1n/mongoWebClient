@@ -32,4 +32,6 @@
         </bean>
     </mvc:interceptors>
 
+    <import resource="spring-security.xml"/>
+
 </beans>
