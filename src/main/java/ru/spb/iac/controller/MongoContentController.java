@@ -6,6 +6,9 @@ import com.mongodb.*;
 import com.mongodb.util.*;
 import lombok.extern.log4j.*;
 import org.bson.types.*;
+import org.codehaus.jackson.JsonProcessingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +17,9 @@ import ru.spb.iac.services.*;
 import ru.spb.iac.ui.*;
 import ru.spb.iac.ui.models.*;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.*;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -32,6 +37,14 @@ public class MongoContentController extends CommonController {
     @Autowired
     @Qualifier("mongoTemplateFactory")
     MongoTemplateFactory mongoFactory;
+
+    Map<String, Integer> operationsMap;
+
+    @PostConstruct
+    public void initOperationsMap(){
+        operationsMap = new TreeMap<String, Integer>();
+        operationsMap.put("find", 1);
+    }
 
     /**
      * get map of database names and collections in the database
@@ -190,5 +203,50 @@ public class MongoContentController extends CommonController {
             writeErrorAjaxResponse(response, "Host or port or database or collection is undefined");
         }
     }
+
+    @RequestMapping(value = "/mongoConsole", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
+    public
+    @ResponseBody
+    void console(MongoAddress address, @RequestParam(value = "query") String query,@RequestParam(value = "operation") String operation, HttpServletResponse response) {
+        if (hasHostPortDbNColl(address) && operationsMap.containsKey(operation)) {
+            try {
+                mongoFactory.initMap(address);
+                BasicDBObject criteria = new BasicDBObject();
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String, Object> map = mapper.readValue(
+                        query,
+                        new TypeReference<Map<String, Object>>() {
+                        });
+                for (String key : map.keySet()){
+                    criteria.put(key, map.get(key));
+                }
+
+                switch (operationsMap.get(operation)){
+                    case 1: {
+                        writeSuccessAjaxResponse(response, JSON.serialize(mongoService.find(address, criteria,new BasicDBObject("_id",true))));
+                        break;
+                    }
+                    default: {
+                        writeErrorAjaxResponse(response, new AjaxResponse("UNSUPPORTED OPERATION") );
+                    }
+                }
+
+
+            } catch (MongoException e) {
+                log.error(e.getMessage(), e);
+                writeErrorAjaxResponse(response, e.getMessage());
+            } catch (JsonProcessingException e) {
+                log.error(e.getMessage(), e);
+                writeErrorAjaxResponse(response, e.getMessage());
+            } catch (IOException e) {
+                log.error(e.getMessage(), e);
+                writeErrorAjaxResponse(response, e.getMessage());
+            }
+        } else {
+            writeErrorAjaxResponse(response, "Host or port or database or collection is undefined");
+        }
+    }
+
+
 
 }

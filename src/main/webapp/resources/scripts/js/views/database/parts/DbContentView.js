@@ -119,16 +119,16 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
         },
         executeRequest: function(){
             var self = this;
-            self.attributes["query"] = JSON.stringify(this.$el.find(".mwc-console-query").text());
-            self.attributes["operation"] = JSON.stringify(this.$el.find(".mwc-console-operation").text());
+            self.model.attributes["query"] = this.$el.find(".mwc-console-query").text();
+            self.model.attributes["operation"] = this.$el.find(".mwc-console-operation").text();
             $.ajax({
                 dataType: "json",
                 type: "GET",
-                data: self,
+                data: self.model.attributes,
                 url: "/mongoWebClient/mongo/mongoConsole",
                 success: function (data) {
                     if (data.status === 'SUCCESS' && data.model) {
-                        console.log(data.model)
+                        self.trigger("event:refreshQueryResult",data.model);
                     } else {
                         MongoWebClient.trigger("event:showErrorDialog", {modalHeader: "Error", modalBody: data.model});
                     }

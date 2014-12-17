@@ -9,7 +9,7 @@ import ru.spb.iac.ui.models.*;
 import javax.servlet.http.*;
 import java.io.*;
 
-/**
+/**  {"applicationId":{"$regex":".*151.*"}}
  * Created by manaev on 10.10.14.
  */
 @Log4j
