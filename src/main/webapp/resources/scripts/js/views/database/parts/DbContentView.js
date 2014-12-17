@@ -138,22 +138,26 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
         changeSkip:function(evt){
             this.model.attributes.skip = evt.currentTarget.value;
             this.model.trigger("change");
+            this.trigger("event:refreshView");
         },
         changeLimit:function(evt){
             this.model.attributes.limit = evt.currentTarget.value;
             this.model.trigger("change");
+            this.trigger("event:refreshView");
         },
         goPrev: function () {
             if(this.model.attributes.skip >= this.incr){
                 this.model.attributes.skip = this.model.attributes.skip-this.incr;
                 this.model.attributes.limit = this.model.attributes.limit-this.incr;
                 this.model.trigger("change");
+                this.trigger("event:refreshView");
             }
         },
         goNext: function () {
             this.model.attributes.skip =  this.model.attributes.skip+this.incr;
             this.model.attributes.limit = this.model.attributes.limit+this.incr;
             this.model.trigger("change");
+            this.trigger("event:refreshView");
         },
         initialize: function (opt) {
             this.incr = 50;

@@ -53,9 +53,6 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             this.attributesEl.currentView.refreshTotal();
             this.contentEl.show(new DatabaseLayout.ContentViewHolder({collection:new DatabaseLayout.CollectionEntities(this.attributesEl.currentView.model.attributes).fetch()}));
         },
-        paginateView:function(){
-            this.contentEl.show(new DatabaseLayout.ContentViewHolder({collection:new DatabaseLayout.CollectionEntities(this.attributesEl.currentView.model.attributes).fetch()}));
-        },
         doClose: function(evt){
             DatabaseLayout.ContentControllerLayout.removeView(evt.data.elem);
             evt.data.elem.destroy();
