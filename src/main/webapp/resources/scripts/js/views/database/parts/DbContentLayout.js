@@ -40,7 +40,9 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             $("#dbContent-tab-panel").find('li.active').removeClass('active');
             $("#dbContent-tab-panel").append(this.tabControlTpl(this.model.attributes));
             this.consoleEl.show(new DatabaseLayout.ConsoleView());
-            this.attributesEl.show(new DatabaseLayout.AttributesView(new DatabaseLayout.Entity(this.model.attributes)));
+            this.model.attributes["skip"] = 0;
+            this.model.attributes["limit"] = 50;
+            this.attributesEl.show(new DatabaseLayout.AttributesView(new DatabaseLayout.AttributesEntity(this.model.attributes)));
             this.contentEl.show(new DatabaseLayout.ContentViewHolder({collection:new DatabaseLayout.CollectionEntities(this.model.attributes).fetch()}));
             var self = this;
             this.listenTo( this.attributesEl.currentView,"event:refreshView",function(){self.refreshView()});
@@ -48,7 +50,11 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             $("#dbContent-tab-panel").on("click", selector,{elem:this},this.doClose);
         },
         refreshView:function(){
-            this.contentEl.show(new DatabaseLayout.ContentViewHolder({collection:new DatabaseLayout.CollectionEntities(this.model.attributes).fetch()}));
+            this.attributesEl.currentView.refreshTotal();
+            this.contentEl.show(new DatabaseLayout.ContentViewHolder({collection:new DatabaseLayout.CollectionEntities(this.attributesEl.currentView.model.attributes).fetch()}));
+        },
+        paginateView:function(){
+            this.contentEl.show(new DatabaseLayout.ContentViewHolder({collection:new DatabaseLayout.CollectionEntities(this.attributesEl.currentView.model.attributes).fetch()}));
         },
         doClose: function(evt){
             DatabaseLayout.ContentControllerLayout.removeView(evt.data.elem);

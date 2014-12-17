@@ -2,19 +2,16 @@
 <%@ include file="/WEB-INF/views/header.jsp" %>
 <html>
 <head>
-    <title></title>
+    <title>MongoWebClient</title>
 </head>
 <body>
 <div class="container">
     <div class="row">
         <div class="col-sm-6 col-md-4 col-md-offset-4">
-            <h1 class="text-center login-title">Sign in to continue to Bootsnipp</h1>
             <div class="account-wall">
-                <img class="profile-img" src="http://forum.minecraft-galaxy.ru/img/avatars/213688"
+                <img class="profile-img" src="<c:url value="/resources/css/kuakamon.png" />"
                      alt="">
-
                 <div class="container-fluid">
-
                     <c:if test="${not empty error}">
                         <div class="alert alert-danger" role="alert">
                             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -30,7 +27,6 @@
                         </div>
                     </c:if>
                 </div>
-
                 <form name='loginForm' class="form-signin" action="<c:url value='j_spring_security_check' />" method='POST'>
                     <input type="text" name='username' class="form-control" placeholder="login" required autofocus>
                     <input type="password" name='password' class="form-control" placeholder="password" required>
@@ -40,7 +36,7 @@
                            value="${_csrf.token}" />
                 </form>
             </div>
-            <a href="#" class="text-center new-account">Create an account </a>
+            <%--<a href="#" class="text-center new-account">Create an account </a>--%>
         </div>
     </div>
 </div>

@@ -1,6 +1,7 @@
 package ru.spb.iac.controller;
 
 import com.google.common.base.*;
+import com.google.common.primitives.*;
 import com.mongodb.*;
 import com.mongodb.util.*;
 import lombok.extern.log4j.*;
@@ -62,6 +63,29 @@ public class MongoContentController extends CommonController {
      * @param address  MongoAddress of the database
      * @param response response to client
      */
+    @RequestMapping(value = "/collectionSize", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
+    public
+    @ResponseBody
+    void collectionSize(MongoAddress address, HttpServletResponse response) {
+        if (hasHostPortDbNColl(address)) {
+            try {
+                mongoFactory.initMap(address);
+                writeSuccessAjaxResponse(response, JSON.serialize(mongoService.collectionSize(address)));
+            } catch (MongoException e) {
+                log.error(e.getMessage(), e);
+                writeErrorAjaxResponse(response, e.getMessage());
+            }
+        } else {
+            writeErrorAjaxResponse(response, "Host or port or database or collection is undefined");
+        }
+    }
+
+    /**
+     * get list of object id's in the collection
+     *
+     * @param address  MongoAddress of the database
+     * @param response response to client
+     */
     @RequestMapping(value = "/viewCollectionEntities", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
     public
     @ResponseBody
@@ -70,6 +94,29 @@ public class MongoContentController extends CommonController {
             try {
                 mongoFactory.initMap(address);
                 writeSuccessAjaxResponse(response, JSON.serialize(mongoService.find(address,new BasicDBObject(),new BasicDBObject("_id",true))));
+            } catch (MongoException e) {
+                log.error(e.getMessage(), e);
+                writeErrorAjaxResponse(response, e.getMessage());
+            }
+        } else {
+            writeErrorAjaxResponse(response, "Host or port or database or collection is undefined");
+        }
+    }
+
+    /**
+     * get paginated list of object id's in the collection
+     *
+     * @param address  MongoAddress of the database
+     * @param response response to client
+     */
+    @RequestMapping(value = "/viewPaginatedCollectionEntities", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
+    public
+    @ResponseBody
+    void viewPaginatedCollectionEntities(MongoAddress address, @RequestParam(value = "skip") String skip, @RequestParam(value = "limit") String limit, HttpServletResponse response) {
+        if (hasHostPortDbNColl(address)) {
+            try {
+                mongoFactory.initMap(address);
+                writeSuccessAjaxResponse(response, JSON.serialize(mongoService.find(address,new BasicDBObject(),new BasicDBObject("_id",true), Ints.tryParse(skip),Ints.tryParse(limit))));
             } catch (MongoException e) {
                 log.error(e.getMessage(), e);
                 writeErrorAjaxResponse(response, e.getMessage());

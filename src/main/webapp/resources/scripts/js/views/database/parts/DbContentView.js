@@ -8,7 +8,7 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
 
     Handlebars.registerHelper("json", function (context) {
         if (({}).toString.call(context).match(/\s([a-z|A-Z]+)/)[1].toLowerCase() != 'string') {
-            return JSON.stringify(context,null,"\t");
+            return JSON.stringify(context, null, "\t");
         } else {
             return context
         }
@@ -36,18 +36,18 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             }
 
         },
-        editEntry:function(){
+        editEntry: function () {
             var temp = JSON.parse(JSON.stringify(this.model.collection.requestData));
             try {
                 /**
                  * system.indexes bug
                  */
                 temp["id"] = this.model.attributes["_id"]["$oid"];
-                if(this.$el.find(".contentViewBody").is(":visible")){
+                if (this.$el.find(".contentViewBody").is(":visible")) {
                     this.$el.find(".contentViewBody").toggleClass("hidden");
                 }
                 var solo = new DatabaseLayout.CollectionEntity().fetch(temp);
-                var e_edb = new  DatabaseLayout.EntityEditor({model:{header: this.model.attributes["_id"]["$oid"], data:solo.attributes, requestData: this.model.collection.requestData}});
+                var e_edb = new DatabaseLayout.EntityEditor({model: {header: this.model.attributes["_id"]["$oid"], data: solo.attributes, requestData: this.model.collection.requestData}});
                 MongoWebClient.eEditRegion.show(e_edb);
                 e_edb.showDialog();
             } catch (e) {
@@ -70,13 +70,13 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
                 evt.data.editEntry();
             }
             if ($(evt.target).hasClass("deleteEntry")) {
-                MongoWebClient.trigger("event:showConfirmDialog",{fCallbackTarget: evt.data,fCallbackName: "deleteEntry", modalHeader:"Confirmation", modalBodyDanger:evt.data.model.attributes["_id"]["$oid"], modalBodyText:"Delete entry"});
+                MongoWebClient.trigger("event:showConfirmDialog", {fCallbackTarget: evt.data, fCallbackName: "deleteEntry", modalHeader: "Confirmation", modalBodyDanger: evt.data.model.attributes["_id"]["$oid"], modalBodyText: "Delete entry"});
             }
             if ($(evt.target).hasClass("viewEntry")) {
                 evt.data.viewEntry();
             }
         },
-        deleteEntry: function(){
+        deleteEntry: function () {
             var temp = JSON.parse(JSON.stringify(this.model.collection.requestData));
             temp["id"] = this.model.attributes["_id"]["$oid"];
             var self = this;
@@ -84,24 +84,26 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
                 dataType: "json",
                 type: "GET",
                 data: temp,
-                url:"/mongoWebClient/mongo/deleteEntity",
+                url: "/mongoWebClient/mongo/deleteEntity",
                 success: function (data) {
                     if (data.status === 'SUCCESS' && data.model) {
                         self.destroy();
-                        MongoWebClient.trigger("event:showSuccessDialog",{modalHeader:"Success",modalBody:"Object deleted"})
-                    } else{
-                        MongoWebClient.trigger("event:showErrorDialog",{modalHeader:"Error",modalBody:data.model});
+                        MongoWebClient.trigger("event:showSuccessDialog", {modalHeader: "Success", modalBody: "Object deleted"})
+                    } else {
+                        MongoWebClient.trigger("event:showErrorDialog", {modalHeader: "Error", modalBody: data.model});
                     }
                 },
-                error:function(e){
-                    MongoWebClient.trigger("event:showErrorDialog",{modalHeader:"Error",modalBody:"Internal server error"});
+                error: function (e) {
+                    MongoWebClient.trigger("event:showErrorDialog", {modalHeader: "Error", modalBody: "Internal server error"});
                 }
             });
         },
         initialize: function () {
             this.template = Handlebars.compile($("#database-content-view-template").html());
             var self = this;
-            this.on("event:deleteEntry",function(){self.deleteEntry()});
+            this.on("event:deleteEntry", function () {
+                self.deleteEntry()
+            });
         }
     });
 
@@ -118,12 +120,49 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
         template: null,
         tagName: "div",
         className: "panel panel-default attributes-view",
-        triggers:{
-        "click .fa-refresh":"event:refreshView"
+        triggers: {
+            "click .mwc-refresh": "event:refreshView"
+        },
+        modelEvents: {
+            'change': 'fieldsChanged'
+        },
+        events: {
+            "click .mwc-prevPage": "goPrev",
+            "click .mwc-nextPage": "goNext",
+            "change .mwc-skip":"changeSkip",
+            "change .mwc-limit":"changeLimit"
+        },
+        fieldsChanged: function() {
+            this.render();
+        },
+        changeSkip:function(evt){
+            this.model.attributes.skip = evt.currentTarget.value;
+            this.model.trigger("change");
+        },
+        changeLimit:function(evt){
+            this.model.attributes.limit = evt.currentTarget.value;
+            this.model.trigger("change");
+        },
+        goPrev: function () {
+            if(this.model.attributes.skip >= this.incr){
+                this.model.attributes.skip = this.model.attributes.skip-this.incr;
+                this.model.attributes.limit = this.model.attributes.limit-this.incr;
+                this.model.trigger("change");
+            }
+        },
+        goNext: function () {
+            this.model.attributes.skip =  this.model.attributes.skip+this.incr;
+            this.model.attributes.limit = this.model.attributes.limit+this.incr;
+            this.model.trigger("change");
         },
         initialize: function (opt) {
+            this.incr = 50;
             this.model = opt;
             this.template = Handlebars.compile($("#database-collection-attributes-view-template").html());
+        },
+        refreshTotal: function () {
+            this.model.getTotal();
+            this.$el.find(".totalHolder").html(this.model.attributes.colSize);
         }
     });
 
@@ -132,7 +171,7 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
         events: {
             "click .validate": "bValidate",
             "click .save": "bSave",
-            "click .maximize":"maximizePre"
+            "click .maximize": "maximizePre"
         },
         initialize: function () {
             this.template = Handlebars.compile($("#edit-entry-modal-dialog").html());
@@ -142,11 +181,11 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
                 JSON.parse(this.$el.find("pre").html());
                 return true;
             } catch (e) {
-                MongoWebClient.trigger("event:showErrorDialog",{modalHeader:"Error",modalBody:"Invalid json " + e});
+                MongoWebClient.trigger("event:showErrorDialog", {modalHeader: "Error", modalBody: "Invalid json " + e});
                 return false;
             }
         },
-        maximizePre:function(){
+        maximizePre: function () {
             console.log("maximize");
             this.$el.find("pre").toggleClass("mwc-edit-sm-h");
         },
@@ -158,30 +197,30 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             if (this.bValidate()) {
                 this.closeDialog();
                 var dataToSend = JSON.parse(JSON.stringify(this.model.requestData));
-                dataToSend["dbObject"] =  this.$el.find("pre").text();
+                dataToSend["dbObject"] = this.$el.find("pre").text();
                 $.ajax({
                     dataType: "json",
                     type: "POST",
                     data: dataToSend,
-                    url:"/mongoWebClient/mongo/updateEntity",
+                    url: "/mongoWebClient/mongo/updateEntity",
                     success: function (data) {
                         if (data.status === 'SUCCESS' && data.model) {
-                            MongoWebClient.trigger("event:showSuccessDialog",{modalHeader:"Success",modalBody:"Object updated"})
-                        } else{
-                            MongoWebClient.trigger("event:showErrorDialog",{modalHeader:"Error",modalBody:data.model});
+                            MongoWebClient.trigger("event:showSuccessDialog", {modalHeader: "Success", modalBody: "Object updated"})
+                        } else {
+                            MongoWebClient.trigger("event:showErrorDialog", {modalHeader: "Error", modalBody: data.model});
                         }
                     },
-                    error:function(e){
-                        MongoWebClient.trigger("event:showErrorDialog",{modalHeader:"Error",modalBody:"Internal server error"});
+                    error: function (e) {
+                        MongoWebClient.trigger("event:showErrorDialog", {modalHeader: "Error", modalBody: "Internal server error"});
                     }
                 });
             }
         },
-        showDialog: function(){
-             this.$el.find('.modal').modal('show');
+        showDialog: function () {
+            this.$el.find('.modal').modal('show');
         },
-        closeDialog: function(){
-             this.$el.find('.modal').modal('hide');
+        closeDialog: function () {
+            this.$el.find('.modal').modal('hide');
         }
     })
 

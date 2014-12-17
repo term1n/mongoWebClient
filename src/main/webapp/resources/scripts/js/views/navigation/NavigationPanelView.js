@@ -10,10 +10,14 @@ MongoWebClient.module("NavigationPanel", function (NavigationPanel, MongoWebClie
             "click #mWcAppName": "event:mwc_showManual"
         },
         events:{
-            "click #create-connection": "createMongoConnection"
+            "click #create-connection": "createMongoConnection",
+            "click #logout-href":"logout"
+        },
+        logout:function(){
+            $("#logoutForm").submit();
         },
         initialize:function(){
-            this.template = Handlebars.compile(MongoWebClient.Templates.navigationPanel);
+            this.template = Handlebars.compile($("#mwc-navbar").html());
         },
         createMongoConnection: function(){
             this.addActive();

@@ -5,6 +5,32 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
 
     DatabaseLayout.Entity = Backbone.Model.extend({});
 
+    DatabaseLayout.AttributesEntity = Backbone.Model.extend({
+        initialize:function(){
+            this.getTotal();
+        },
+        getTotal:function(){
+            var self = this;
+            $.ajax({
+                dataType: "json",
+                type: "GET",
+                data: self.attributes,
+                async:false,
+                url:"/mongoWebClient/mongo/collectionSize",
+                success: function (data) {
+                    if (data.status === 'SUCCESS' && data.model) {
+                        self.attributes.colSize = data.model;
+                    } else{
+                        MongoWebClient.trigger("event:showErrorDialog",{modalHeader:"Error",modalBody:"Can't establish connection"});
+                    }
+                },
+                error:function(){
+                    MongoWebClient.trigger("event:showErrorDialog",{modalHeader:"Error",modalBody:"Can't establish connection"});
+                }
+            });
+        }
+    });
+
     DatabaseLayout.CollectionEntity = Backbone.Model.extend({
         url:"/mongoWebClient/mongo/viewCollectionEntity",
         fetch: function (opt) {
@@ -30,7 +56,7 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
     });
 
     DatabaseLayout.CollectionEntities = Backbone.Collection.extend({
-        url:"/mongoWebClient/mongo/viewCollectionEntities",
+        url:"/mongoWebClient/mongo/viewPaginatedCollectionEntities",
         model:DatabaseLayout.Entity,
         comparator:"_id",
         initialize: function(opt){

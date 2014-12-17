@@ -5,7 +5,7 @@ MongoWebClient.module("NavigationPanel", function (NavigationPanel, MongoWebClie
     NavigationPanel.Model = Backbone.Model.extend({});
     NavigationPanel.Controller = {
         showStartView: function (appName) {
-            MongoWebClient.navigationPanelView = new NavigationPanel.Show({model: new NavigationPanel.Model({appName:appName})});
+            MongoWebClient.navigationPanelView = new NavigationPanel.Show({model: new NavigationPanel.Model({appName:appName, username:MongoWebClient.username})});
 
             MongoWebClient.navigationRegion.show(MongoWebClient.navigationPanelView);
 

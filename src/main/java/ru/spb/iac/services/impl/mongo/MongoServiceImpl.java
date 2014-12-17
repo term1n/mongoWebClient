@@ -57,6 +57,26 @@ public class MongoServiceImpl implements MongoService {
     }
 
     @Override
+    public long collectionSize(MongoAddress mongoAddress) throws MongoException {
+        if (!Strings.isNullOrEmpty(mongoAddress.getDbName()) && !Strings.isNullOrEmpty(mongoAddress.getCollName())) {
+            DBCollection collection = mongoTemplateFactory.getOperationsTemplate(mongoAddress).getCollection(mongoAddress.getCollName());
+            return collection.count();
+        } else {
+            throw new MongoException("No collection name of database name specified");
+        }
+    }
+
+    @Override
+    public List<DBObject> find(MongoAddress mongoAddress, BasicDBObject query, BasicDBObject fields, int skip, int limit) throws MongoException {
+        if (!Strings.isNullOrEmpty(mongoAddress.getDbName()) && !Strings.isNullOrEmpty(mongoAddress.getCollName())) {
+            DBCollection collection = mongoTemplateFactory.getOperationsTemplate(mongoAddress).getCollection(mongoAddress.getCollName());
+            return basicOperations.getCursorBody(collection.find(query,fields).limit(limit).skip(skip));
+        } else {
+            throw new MongoException("No collection name of database name specified");
+        }
+    }
+
+    @Override
     public List<DBObject> find(MongoAddress mongoAddress, BasicDBObject query,BasicDBObject fields) throws MongoException {
         if (!Strings.isNullOrEmpty(mongoAddress.getDbName()) && !Strings.isNullOrEmpty(mongoAddress.getCollName())) {
             DBCollection collection = mongoTemplateFactory.getOperationsTemplate(mongoAddress).getCollection(mongoAddress.getCollName());

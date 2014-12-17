@@ -22,7 +22,8 @@ public interface MongoService {
     public List<DBObject> find(MongoAddress mongoAddress, BasicDBObject query) throws MongoException;
     public List<DBObject> find(MongoAddress mongoAddress, BasicDBObject query,BasicDBObject fields) throws MongoException;
     public DBObject findOne(MongoAddress mongoAddress, BasicDBObject query) throws MongoException;
-
+    public List<DBObject> find(MongoAddress mongoAddress, BasicDBObject query,BasicDBObject fields,int skip,int limit) throws MongoException;
     public void findAndRemove(MongoAddress mongoAddress, BasicDBObject query) throws MongoException;
+    public long collectionSize(MongoAddress mongoAddress) throws MongoException;
 
 }
