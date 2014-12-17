@@ -4,7 +4,7 @@
 MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient, Backbone, Marionette, $, _) {
 
     DatabaseLayout.Entity = Backbone.Model.extend({});
-
+    DatabaseLayout.ConsoleEntity = Backbone.Model.extend({});
     DatabaseLayout.AttributesEntity = Backbone.Model.extend({
         initialize:function(){
             this.getTotal();

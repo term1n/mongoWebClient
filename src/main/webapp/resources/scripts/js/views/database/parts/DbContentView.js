@@ -111,8 +111,32 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
         template: null,
         tagName: "div",
         className: "panel panel-default console-view",
+        events:{
+            "click .mwc-console-execute":"executeRequest"
+        },
         initialize: function () {
             this.template = Handlebars.compile($("#database-console-template").html());
+        },
+        executeRequest: function(){
+            var self = this;
+            self.attributes["query"] = JSON.stringify(this.$el.find(".mwc-console-query").text());
+            self.attributes["operation"] = JSON.stringify(this.$el.find(".mwc-console-operation").text());
+            $.ajax({
+                dataType: "json",
+                type: "GET",
+                data: self,
+                url: "/mongoWebClient/mongo/mongoConsole",
+                success: function (data) {
+                    if (data.status === 'SUCCESS' && data.model) {
+                        console.log(data.model)
+                    } else {
+                        MongoWebClient.trigger("event:showErrorDialog", {modalHeader: "Error", modalBody: data.model});
+                    }
+                },
+                error: function (e) {
+                    MongoWebClient.trigger("event:showErrorDialog", {modalHeader: "Error", modalBody: "Internal server error"});
+                }
+            });
         }
     });
 

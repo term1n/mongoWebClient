@@ -255,29 +255,29 @@
             <span class="fa fa-info-circle padding-lr-5"> Total: </span><span class="totalHolder">{{colSize}}</span>
         </div>
         <div class="container-fluid" style="padding-left:0px;">
-                <div class="col-lg-2 col-sm-2 col-xs-2" style="padding-left:0px;">
-                    <button type="button" class="btn btn-default mwc-refresh ">
-                        <span class="fa fa-refresh"> Refresh</span>
-                    </button>
-                </div>
-                <div class="col-lg-3 col-sm-3 col-xs-3" style="float:right;">
-                    <div class="col-lg-6 col-sm-6 col-xs-6" style="padding-right:2px;">
-                        <div class="input-group">
+            <div class="col-lg-2 col-sm-2 col-xs-2" style="padding-left:0px;">
+                <button type="button" class="btn btn-default mwc-refresh ">
+                    <span class="fa fa-refresh"> Refresh</span>
+                </button>
+            </div>
+            <div class="col-lg-3 col-sm-3 col-xs-3" style="float:right;">
+                <div class="col-lg-6 col-sm-6 col-xs-6" style="padding-right:2px;">
+                    <div class="input-group">
                              <span class="input-group-addon h-cursor-pointer mwc-prevPage">
                                  <span class=" fa fa-chevron-left" aria-hidden="true"></span>
                              </span>
-                            <input type="text" class="form-control mwc-skip" value="{{skip}}"/>
-                        </div>
+                        <input type="text" class="form-control mwc-skip" value="{{skip}}"/>
                     </div>
-                    <div class="col-lg-6 col-sm-6 col-xs-6" style="padding-left:2px;">
-                        <div class="input-group">
-                            <input type="text" class="form-control mwc-limit" value="{{limit}}"/>
+                </div>
+                <div class="col-lg-6 col-sm-6 col-xs-6" style="padding-left:2px;">
+                    <div class="input-group">
+                        <input type="text" class="form-control mwc-limit" value="{{limit}}"/>
                              <span class="input-group-addon h-cursor-pointer mwc-nextPage">
                                  <span class=" fa fa-chevron-right"></span>
                              </span>
-                        </div>
                     </div>
                 </div>
+            </div>
 
         </div>
     </div>
@@ -295,7 +295,14 @@
 
 <script type="text/x-handlebars-template" id="database-console-template">
     <div class="panel-body st_console">
-        !!!Console will be HERE TODO!!!
+        <div class="container-fluid" style="padding-left:0px;">
+            <span class="fa fa-play hoverable-scale mwc-console-execute" style="padding-right:10px;"></span>
+            <span>{{dbName}}.{{collName}}.</span>&nbsp;
+            <span contenteditable="true" class="mwc-console-operation">find</span>&nbsp;
+            <span>.(</span>&nbsp;
+            <span contenteditable="true" class="mwc-console-query">{}</span>&nbsp;
+            <span>)</span>
+        </div>
     </div>
 </script>
 

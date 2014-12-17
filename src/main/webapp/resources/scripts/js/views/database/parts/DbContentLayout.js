@@ -39,9 +39,9 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             this.$el.prop("id", this.model.attributes.contentId);
             $("#dbContent-tab-panel").find('li.active').removeClass('active');
             $("#dbContent-tab-panel").append(this.tabControlTpl(this.model.attributes));
-            this.consoleEl.show(new DatabaseLayout.ConsoleView());
             this.model.attributes["skip"] = 0;
             this.model.attributes["limit"] = 50;
+            this.consoleEl.show(new DatabaseLayout.ConsoleView({model:new DatabaseLayout.ConsoleEntity(this.model.attributes)}));
             this.attributesEl.show(new DatabaseLayout.AttributesView(new DatabaseLayout.AttributesEntity(this.model.attributes)));
             this.contentEl.show(new DatabaseLayout.ContentViewHolder({collection:new DatabaseLayout.CollectionEntities(this.model.attributes).fetch()}));
             var self = this;

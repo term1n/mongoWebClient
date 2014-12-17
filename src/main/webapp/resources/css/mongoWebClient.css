@@ -53,6 +53,8 @@ body {
 .st_console{
     background-color: #000000;
     color: #ffffff;
+    font-size: 14px;
+    text-decoration: wavy;
     border-left:0 none;
     border-right:0 none;
     border-top-left-radius: 0;
