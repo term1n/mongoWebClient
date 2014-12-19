@@ -26,11 +26,16 @@
 
 <%--navigation panel--%>
 
-<nav class="navbar navbar-default" role="navigation" id="navigation-panel">
+<nav class="navbar navbar-inverse" role="navigation" id="navigation-panel">
 </nav>
 
 <div id="main-region" class="main-region container-fluid">
 </div>
+
+<%--for manual--%>
+<div id="manual-region" class="main-region container-fluid">
+</div>
+
 <%--div for connection manager--%>
 <div id="database-connection-manager">
 </div>
@@ -326,7 +331,7 @@
         <ul class="nav nav-tabs" role="tablist" id="dbContent-tab-panel" style="border-bottom:0;">
 
         </ul>
-        <div class="tab-content" id="dbContent-tab-content">
+        <div class="tab-content" id="dbContent-tab-content" style="margin-top:0px;">
         </div>
     </div>
 </script>
@@ -352,49 +357,38 @@
 </script>
 
 <script type="text/x-handlebars-template" id="database-connections-connection-div-template">
-    <div id="{{id}}">
+    <div id="{{id}}" class="padding-r10">
     </div>
 </script>
 
 <script type="text/x-handlebars-template" id="database-view-template">
-    <div class="accordion">
-        <div class="panel-group" id="{{connectionName}}" style="margin-bottom:0;">
-            <div class="panel panel-default">
-                <div class="panel-heading" onclick="$('#top{{connectionName}}').collapse('toggle');">
-                    <h4 class="panel-title">
-                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#{{connectionName}}"
-                           href="#top{{connectionName}}">
-                            {{connectionName}}
-                        </a>
-                    </h4>
-                </div>
-                <div class="panel-collapse collapse" id="top{{connectionName}}">
-                    <div class="panel-body">
-                        <div id="child{{connectionName}}" class="panel-group" style="margin-bottom:0;">
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div id="{{connectionName}}">
+        <div class="collapser h-cursor-pointer">
+            <i class="fa fa-caret-down hide"></i>
+            <i class="fa fa-caret-right"></i>
+            <span><span class="fa fa-desktop padding-lr-5"></span>{{connectionName}}</span>
+        </div>
+        <div class="collapsible collapse">
+            <div id="child{{connectionName}}"></div>
         </div>
     </div>
 </script>
 
 <script type="text/x-handlebars-template" id="database-element-template">
-    <div class="panel-heading" onclick="$('#{{dataParent}}{{dbName}}').collapse('toggle');">
-        <h4 class="panel-title">
-            <a class="accordion-toggle" data-toggle="collapse" data-parent="#{{dataParent}}"
-               href="#{{dataParent}}{{dbName}}">
+    <div class="collapser h-cursor-pointer">
+        <i class="fa fa-caret-down hide"></i>
+        <i class="fa fa-caret-right"></i>
+        <span><span class="fa fa-database padding-lr-5"></span>
                 {{dbName}}
-            </a>
-        </h4>
+        </span>
     </div>
-    <div class="panel-collapse collapse" id="{{dataParent}}{{dbName}}">
-        <div class="panel-body" style="padding:0">
-            <div class="list-group" style="margin-bottom:0;">
-                {{#each collectionNames}}
-                <a class="list-group-item" style="border:0;">{{this}}</a>
-                {{/each}}
+    <div class="collapsible collapse">
+        <div>
+            {{#each collectionNames}}
+            <div class="collectionName h-cursor-pointer" targetcoll="{{this}}">
+            <span><span class="fa fa-folder-o padding-lr-5"></span>{{this}}</span>
             </div>
+            {{/each}}
         </div>
     </div>
 </script>
@@ -408,13 +402,17 @@
             <li id='create-connection'>
                 <a class='h-cursor-pointer'>Create connection</a>
             </li>
+            <li id='view-connections' style='display: none'>
+                <a class='h-cursor-pointer'>View opened connections</a>
+            </li>
         </ul>
         <ul class='nav navbar-nav navbar-right'>
             <li>
-                <p style="font-weight:bold" class="navbar-text">{{username}} </p>
+                <p class="navbar-text"><i class="fa fa-user"></i> {{username}} </p>
             </li>
             <li>
-                <a id="logout-href" class='h-cursor-pointer text-info'><i class="fa fa-sign-out"/></i> Logout</a>
+                <p id="logout-href" class='h-cursor-pointer navbar-text nav-p-hover'><i class="fa fa-sign-out"/></i>
+                    Logout</p>
             </li>
         </ul>
     </div>

@@ -23,6 +23,7 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
     DatabaseLayout.ConnectionsView = Backbone.Marionette.LayoutView.extend({
         template: null,
         tagName:"div",
+        className:"panel panel-default",
         initialize: function () {
             var tempTemplate = "";
             this.childTemplate = Handlebars.compile($("#database-connections-connection-div-template").html());

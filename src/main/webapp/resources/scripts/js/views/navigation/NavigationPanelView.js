@@ -7,7 +7,8 @@ MongoWebClient.module("NavigationPanel", function (NavigationPanel, MongoWebClie
         tagName:"div",
         className:"container-fluid",
         triggers: {
-            "click #mWcAppName": "event:mwc_showManual"
+            "click #mWcAppName": "event:mwc_showManual",
+            "click #view-connections":"event:viewOpenedConnections"
         },
         events:{
             "click #create-connection": "createMongoConnection",
@@ -20,14 +21,21 @@ MongoWebClient.module("NavigationPanel", function (NavigationPanel, MongoWebClie
             this.template = Handlebars.compile($("#mwc-navbar").html());
         },
         createMongoConnection: function(){
-            this.addActive();
+            this.addCCActive();
             this.trigger("event:showDCMDialog",this);
         },
-        addActive:function(){
+        addCCActive:function(){
             $("#create-connection").addClass("active");
+        },
+        addVCActive:function(){
+            $("#view-connections").addClass("active");
         },
         removeActive:function(){
             $("#create-connection").removeClass("active");
+            $("#view-connections").removeClass("active");
+        },
+        toggleVC: function(){
+            $("#view-connections").toggle('hide');
         }
     });
 });

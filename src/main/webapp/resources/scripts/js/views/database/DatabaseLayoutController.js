@@ -6,6 +6,9 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
         showDatabaseLayout: function () {
             MongoWebClient.databaseLayout = new DatabaseLayout.Layout({collection: MongoWebClient.databaseConnectionsCollection});
             MongoWebClient.mainRegion.show(MongoWebClient.databaseLayout);
+            MongoWebClient.navigationPanelView.removeActive();
+            MongoWebClient.navigationPanelView.addVCActive();
+            MongoWebClient.mainRegion.$el.show();
         },
         addConnection: function (opt) {
             if (MongoWebClient.databaseConnectionsCollection) {
@@ -16,6 +19,7 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
                     return false;
                 }
             } else {
+                MongoWebClient.navigationPanelView.toggleVC();
                 MongoWebClient.databaseConnectionsCollection = new DatabaseLayout.ConnectionCollection();
                 return MongoWebClient.databaseConnectionsCollection.addConnection(opt);
             }

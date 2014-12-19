@@ -5,11 +5,12 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
     DatabaseLayout.Element = Backbone.Marionette.ItemView.extend({
         template: null,
         tagName: "div",
-        className: "panel panel-default",
+        className: "",
         events: {
-            "contextmenu .list-group-item": "fireMenuCollection",
+            "contextmenu .collectionName": "fireMenuCollection",
             "contextmenu .panel-heading": "fireMenuDatabase",
-            "dblclick .list-group-item": "viewDbCollection"
+            "dblclick .collectionName": "viewDbCollection",
+            "click .collapser":"doToggle"
         },
         fireMenuCollection: function (evt) {
             evt.preventDefault();
@@ -17,7 +18,7 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
                 host:this.model.collection.requestData.host,
                 port:this.model.collection.requestData.port,
                 name:this.model.collection.requestData.name,
-                collName:evt.currentTarget.innerHTML,
+                collName:evt.currentTarget.getAttribute("targetcoll"),
                 dbName:this.model.get("dbName")
             };
             $("#context-menu-placeholder").show().css({ position: "absolute",left: MongoWebClient.locate(evt).left,top: MongoWebClient.locate(evt).top}).off('click')
@@ -29,7 +30,7 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
                 host:this.model.collection.requestData.host,
                 port:this.model.collection.requestData.port,
                 name:this.model.collection.requestData.name,
-                collName:evt.currentTarget.innerHTML,
+                collName:evt.currentTarget.getAttribute("targetcoll"),
                 dbName:this.model.get("dbName")
             };
             MongoWebClient.trigger("event:viewCollection",rData);
@@ -67,16 +68,31 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
         },
         initialize: function () {
             this.template = Handlebars.compile($("#database-element-template").html());
+        },
+        doToggle: function(evt){
+            this.$el.find(".collapsible").first().collapse('toggle');
+            this.$el.find(".fa-caret-down").first().toggleClass('hide');
+            this.$el.find(".fa-caret-right").first().toggleClass('hide');
+            evt.stopPropagation();
         }
     });
     DatabaseLayout.Container = Backbone.Marionette.CompositeView.extend({
         childView: DatabaseLayout.Element,
         childViewContainer: null,
         template: null,
+        className:"",
+        events:{
+            "click .collapser":"doToggle"
+        },
         initialize: function () {
             this.childViewContainer = "#child" + this.collection.connectionName;
             this.template = Handlebars.compile($("#database-view-template").html());
             this.template = this.template({connectionName: this.collection.connectionName});
+        },
+        doToggle: function(){
+            this.$el.find(".collapsible").first().collapse('toggle');
+            this.$el.find(".fa-caret-down").first().toggleClass('hide');
+            this.$el.find(".fa-caret-right").first().toggleClass('hide');
         }
     });
 });

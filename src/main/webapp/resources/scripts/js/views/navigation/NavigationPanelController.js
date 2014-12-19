@@ -13,7 +13,14 @@ MongoWebClient.module("NavigationPanel", function (NavigationPanel, MongoWebClie
 
             MongoWebClient.navigationPanelView.on("event:mwc_showManual",function(){
                 MongoWebClient.navigationPanelView.removeActive();
-                MongoWebClient.mainRegion.show(new NavigationPanel.ManualShow());
+                MongoWebClient.mainRegion.$el.hide();
+                MongoWebClient.manualRegion.show(new NavigationPanel.ManualShow());
+            });
+            MongoWebClient.navigationPanelView.on("event:viewOpenedConnections",function(){
+                MongoWebClient.navigationPanelView.removeActive();
+                MongoWebClient.navigationPanelView.addVCActive();
+                MongoWebClient.mainRegion.$el.show();
+                MongoWebClient.manualRegion.empty();
             });
         }
     };
