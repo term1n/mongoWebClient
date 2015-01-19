@@ -59,10 +59,13 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             this.contentEl.show(new DatabaseLayout.ContentViewHolder({collection: new DatabaseLayout.CollectionEntities(this.attributesEl.currentView.model.attributes).fetch()}));
         },
         refreshQueryResult: function (data) {
-            this.attributesEl.currentView.refreshTotal();
             var coll = new DatabaseLayout.CollectionEntities(JSON.parse(data));
+            if(!data){
+                this.attributesEl.currentView.refreshTotal();
+            } else{
+                this.attributesEl.currentView.refreshTotal(coll.length);
+            }
             coll.requestData = this.attributesEl.currentView.model.attributes;
-            console.log(coll)
             this.contentEl.show(new DatabaseLayout.ContentViewHolder({collection: coll}));
 
         },

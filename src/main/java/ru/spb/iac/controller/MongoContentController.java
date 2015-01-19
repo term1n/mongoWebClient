@@ -207,7 +207,7 @@ public class MongoContentController extends CommonController {
     @RequestMapping(value = "/mongoConsole", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
     public
     @ResponseBody
-    void console(MongoAddress address, @RequestParam(value = "query") String query,@RequestParam(value = "operation") String operation, HttpServletResponse response) {
+    void console(MongoAddress address, @RequestParam(value = "query") String query,@RequestParam(value = "operation") String operation, @RequestParam(value = "skip") String skip, @RequestParam(value = "limit") String limit, HttpServletResponse response) {
         if (hasHostPortDbNColl(address) && operationsMap.containsKey(operation)) {
             try {
                 mongoFactory.initMap(address);
@@ -223,7 +223,7 @@ public class MongoContentController extends CommonController {
 
                 switch (operationsMap.get(operation)){
                     case 1: {
-                        writeSuccessAjaxResponse(response, JSON.serialize(mongoService.find(address, criteria,new BasicDBObject("_id",true))));
+                        writeSuccessAjaxResponse(response, JSON.serialize(mongoService.find(address, criteria,new BasicDBObject("_id",true),Ints.tryParse(skip),Ints.tryParse(limit))));
                         break;
                     }
                     default: {

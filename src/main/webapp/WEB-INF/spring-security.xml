@@ -5,9 +5,9 @@
 	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 	http://www.springframework.org/schema/security
 	http://www.springframework.org/schema/security/spring-security-3.2.xsd">
-
     <http auto-config="true">
-        <intercept-url pattern="/mongoWebClient**" access="ROLE_USER" />
+        <intercept-url pattern="/mongoWebClient/**" access="ROLE_USER" />
+        <intercept-url method="POST" pattern="/mongoWebClient/mongo/updateEntity" access="ROLE_USER" />
         <form-login
                 login-page="/login"
                 default-target-url="/mongoWebClient"
@@ -22,7 +22,7 @@
     <authentication-manager>
         <authentication-provider>
             <user-service>
-                <user name="user" password="user" authorities="ROLE_USER" />
+                <user name="user" password="spbIACMongoUser" authorities="ROLE_USER" />
             </user-service>
         </authentication-provider>
     </authentication-manager>

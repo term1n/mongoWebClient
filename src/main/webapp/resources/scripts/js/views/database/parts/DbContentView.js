@@ -188,8 +188,12 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             this.model = opt;
             this.template = Handlebars.compile($("#database-collection-attributes-view-template").html());
         },
-        refreshTotal: function () {
-            this.model.getTotal();
+        refreshTotal: function (length) {
+            if(!length){
+                this.model.getTotal();
+            } else{
+                this.model.attributes.colSize = length;
+            }
             this.$el.find(".totalHolder").html(this.model.attributes.colSize);
         }
     });
@@ -226,6 +230,7 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
                 this.closeDialog();
                 var dataToSend = JSON.parse(JSON.stringify(this.model.requestData));
                 dataToSend["dbObject"] = this.$el.find("pre").text();
+                dataToSend["_csrf"] = $("#logoutForm").find("input").val();
                 $.ajax({
                     dataType: "json",
                     type: "POST",
