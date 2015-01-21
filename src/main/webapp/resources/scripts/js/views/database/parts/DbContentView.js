@@ -128,7 +128,7 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
                 url: "/mongoWebClient/mongo/mongoConsole",
                 success: function (data) {
                     if (data.status === 'SUCCESS' && data.model) {
-                        self.trigger("event:refreshQueryResult",data.model);
+                        self.trigger("event:refreshQueryResult",data.model,self.model.attributes);
                     } else {
                         MongoWebClient.trigger("event:showErrorDialog", {modalHeader: "Error", modalBody: data.model});
                     }
@@ -188,11 +188,11 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             this.model = opt;
             this.template = Handlebars.compile($("#database-collection-attributes-view-template").html());
         },
-        refreshTotal: function (length) {
-            if(!length){
+        refreshTotal: function (query) {
+            if(!query){
                 this.model.getTotal();
             } else{
-                this.model.attributes.colSize = length;
+                this.model.getTotal(query);
             }
             this.$el.find(".totalHolder").html(this.model.attributes.colSize);
         }

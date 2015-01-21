@@ -21,9 +21,12 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
                 collName:evt.currentTarget.getAttribute("targetcoll"),
                 dbName:this.model.get("dbName")
             };
+            var self = this;
+            self.rData = {};
+            self.rData = rData;
             $("#context-menu-placeholder").show().css({ position: "absolute",left: MongoWebClient.locate(evt).left,top: MongoWebClient.locate(evt).top}).off('click')
                 .mouseleave(function(){$(this).hide();})
-                .on('click',rData,this.clickCollectionMenuItem);
+                .on('click',self,this.clickCollectionMenuItem);
         },
         viewDbCollection: function(evt){
             var rData = {
@@ -38,11 +41,30 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
         clickCollectionMenuItem:function(evt){
             $(this).hide();
             if($(evt.target).hasClass("viewCollection")){
-                MongoWebClient.trigger("event:viewCollection",evt.data);
+                MongoWebClient.trigger("event:viewCollection",evt.data.rData);
             }
             if($(evt.target).hasClass("dropCollection")){
-                console.log("dropCollection");
+                MongoWebClient.trigger("event:showConfirmDialog", {fCallbackTarget: evt.data, fCallbackName: "dropCollection", modalHeader: "Confirmation", modalBodyDanger: evt.data.rData.collName, modalBodyText: "Drop collection "});
             }
+        },
+        dropCollection:function(){
+            $.ajax({
+                dataType: "json",
+                type: "GET",
+                data: this.rData,
+                async:false,
+                url:"/mongoWebClient/mongo/dropCollection",
+                success: function (data) {
+                    if (data.status === 'SUCCESS' && data.model) {
+                        MongoWebClient.trigger("event:showSuccessDialog",{modalHeader:"Success",modalBody:"Collection dropped"});
+                    } else{
+                        MongoWebClient.trigger("event:showErrorDialog",{modalHeader:"Error",modalBody:"Internal error" + JSON.stringify(data.model)});
+                    }
+                },
+                error:function(err){
+                    MongoWebClient.trigger("event:showErrorDialog",{modalHeader:"Error",modalBody:JSON.stringify(err)});
+                }
+            });
         },
         clickDatabaseMenuItem:function(evt){
             $(this).hide();
@@ -68,6 +90,10 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
         },
         initialize: function () {
             this.template = Handlebars.compile($("#database-element-template").html());
+            var self = this;
+            this.on("event:dropCollection", function () {
+                self.dropCollection()
+            });
         },
         doToggle: function(evt){
             this.$el.find(".collapsible").first().collapse('toggle');

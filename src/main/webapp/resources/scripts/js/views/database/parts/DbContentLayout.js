@@ -48,8 +48,8 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             this.listenTo(this.attributesEl.currentView, "event:refreshView", function () {
                 self.refreshView()
             });
-            this.listenTo(this.consoleEl.currentView, "event:refreshQueryResult", function (data) {
-                self.refreshQueryResult(data)
+            this.listenTo(this.consoleEl.currentView, "event:refreshQueryResult", function (data,query) {
+                self.refreshQueryResult(data,query)
             });
             var selector = "." + this.model.attributes.contentId + " .close";
             $("#dbContent-tab-panel").on("click", selector, {elem: this}, this.doClose);
@@ -58,12 +58,13 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             this.attributesEl.currentView.refreshTotal();
             this.contentEl.show(new DatabaseLayout.ContentViewHolder({collection: new DatabaseLayout.CollectionEntities(this.attributesEl.currentView.model.attributes).fetch()}));
         },
-        refreshQueryResult: function (data) {
+        refreshQueryResult: function (data,query) {
             var coll = new DatabaseLayout.CollectionEntities(JSON.parse(data));
-            if(!data){
+            console.log(query)
+            if(!query){
                 this.attributesEl.currentView.refreshTotal();
             } else{
-                this.attributesEl.currentView.refreshTotal(coll.length);
+                this.attributesEl.currentView.refreshTotal(query);
             }
             coll.requestData = this.attributesEl.currentView.model.attributes;
             this.contentEl.show(new DatabaseLayout.ContentViewHolder({collection: coll}));

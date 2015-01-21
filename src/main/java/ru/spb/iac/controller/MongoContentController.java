@@ -6,7 +6,7 @@ import com.mongodb.*;
 import com.mongodb.util.*;
 import lombok.extern.log4j.*;
 import org.bson.types.*;
-import org.codehaus.jackson.JsonProcessingException;
+import org.codehaus.jackson.*;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.*;
@@ -79,11 +79,35 @@ public class MongoContentController extends CommonController {
     @RequestMapping(value = "/collectionSize", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
     public
     @ResponseBody
-    void collectionSize(MongoAddress address, HttpServletResponse response) {
+    void collectionSize(MongoAddress address, HttpServletResponse response, @RequestParam(required = false,value = "query") String query,@RequestParam(required = false,value = "operation") String operation) throws IOException {
         if (hasHostPortDbNColl(address)) {
             try {
                 mongoFactory.initMap(address);
-                writeSuccessAjaxResponse(response, JSON.serialize(mongoService.collectionSize(address)));
+
+                if(!Strings.isNullOrEmpty(query)){
+                    BasicDBObject criteria = new BasicDBObject();
+                    ObjectMapper mapper = new ObjectMapper();
+                    Map<String, Object> map = mapper.readValue(
+                            query,
+                            new TypeReference<Map<String, Object>>() {
+                            });
+                    for (String key : map.keySet()){
+                        criteria.put(key, map.get(key));
+                    }
+
+                    switch (operationsMap.get(operation)){
+                        case 1: {
+                            writeSuccessAjaxResponse(response, JSON.serialize(mongoService.find(address, criteria,new BasicDBObject("_id",true)).size()));
+                            break;
+                        }
+                        default: {
+                            writeErrorAjaxResponse(response, new AjaxResponse("UNSUPPORTED OPERATION") );
+                        }
+                    }
+                }  else{
+                    writeSuccessAjaxResponse(response, JSON.serialize(mongoService.collectionSize(address)));
+                }
+
             } catch (MongoException e) {
                 log.error(e.getMessage(), e);
                 writeErrorAjaxResponse(response, e.getMessage());
@@ -148,6 +172,24 @@ public class MongoContentController extends CommonController {
                 mongoFactory.initMap(address);
                 DBObject temp = (DBObject)JSON.parse(dbObject);
                 mongoService.save(address,temp);
+                writeSuccessAjaxResponse(response,new AjaxResponse("SUCCESS"));
+            } catch (MongoException e) {
+                log.error(e.getMessage(), e);
+                writeErrorAjaxResponse(response, e.getMessage());
+            }
+        } else {
+            writeErrorAjaxResponse(response, "Host or port or database or collection is undefined");
+        }
+    }
+
+    @RequestMapping(value = "/dropCollection", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
+    public
+    @ResponseBody
+    void dropCollection(MongoAddress address,  HttpServletResponse response) {
+        if (hasHostPortDbNColl(address)) {
+            try {
+                mongoFactory.initMap(address);
+                mongoService.dropCollection(address);
                 writeSuccessAjaxResponse(response,new AjaxResponse("SUCCESS"));
             } catch (MongoException e) {
                 log.error(e.getMessage(), e);

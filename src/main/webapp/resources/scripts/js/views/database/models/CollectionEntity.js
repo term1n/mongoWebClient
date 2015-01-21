@@ -9,8 +9,12 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
         initialize:function(){
             this.getTotal();
         },
-        getTotal:function(){
+        getTotal:function(query){
             var self = this;
+            if(query){
+                self.attributes["operation"] = query["operation"];
+                self.attributes["query"] = query["query"];
+            }
             $.ajax({
                 dataType: "json",
                 type: "GET",
