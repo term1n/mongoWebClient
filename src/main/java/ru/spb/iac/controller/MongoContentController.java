@@ -70,6 +70,8 @@ public class MongoContentController extends CommonController {
         }
     }
 
+
+
     /**
      * get list of object id's in the collection
      *
@@ -85,19 +87,11 @@ public class MongoContentController extends CommonController {
                 mongoFactory.initMap(address);
 
                 if(!Strings.isNullOrEmpty(query)){
-                    BasicDBObject criteria = new BasicDBObject();
-                    ObjectMapper mapper = new ObjectMapper();
-                    Map<String, Object> map = mapper.readValue(
-                            query,
-                            new TypeReference<Map<String, Object>>() {
-                            });
-                    for (String key : map.keySet()){
-                        criteria.put(key, map.get(key));
-                    }
+                    BasicDBObject criteria = composeCriteria(query);
 
                     switch (operationsMap.get(operation)){
                         case 1: {
-                            writeSuccessAjaxResponse(response, JSON.serialize(mongoService.find(address, criteria,new BasicDBObject("_id",true)).size()));
+                            writeSuccessAjaxResponse(response, JSON.serialize(mongoService.collectionSize(address, criteria)));
                             break;
                         }
                         default: {
@@ -115,6 +109,19 @@ public class MongoContentController extends CommonController {
         } else {
             writeErrorAjaxResponse(response, "Host or port or database or collection is undefined");
         }
+    }
+
+    private BasicDBObject composeCriteria(String query) throws IOException {
+        BasicDBObject criteria = new BasicDBObject();
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> map = mapper.readValue(
+                query,
+                new TypeReference<Map<String, Object>>() {
+                });
+        for (String key : map.keySet()){
+            criteria.put(key, map.get(key));
+        }
+        return criteria;
     }
 
     /**
@@ -253,15 +260,7 @@ public class MongoContentController extends CommonController {
         if (hasHostPortDbNColl(address) && operationsMap.containsKey(operation)) {
             try {
                 mongoFactory.initMap(address);
-                BasicDBObject criteria = new BasicDBObject();
-                ObjectMapper mapper = new ObjectMapper();
-                Map<String, Object> map = mapper.readValue(
-                        query,
-                        new TypeReference<Map<String, Object>>() {
-                        });
-                for (String key : map.keySet()){
-                    criteria.put(key, map.get(key));
-                }
+                BasicDBObject criteria = composeCriteria(query);
 
                 switch (operationsMap.get(operation)){
                     case 1: {
