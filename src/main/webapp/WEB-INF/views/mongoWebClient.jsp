@@ -300,14 +300,51 @@
 
 <script type="text/x-handlebars-template" id="database-console-template">
     <div class="panel-body st_console">
-        <div class="container-fluid" style="padding-left:0px;">
-            <span class="fa fa-play hoverable-scale mwc-console-execute" style="padding-right:10px;"></span>
-            <span>{{dbName}}.{{collName}}.</span>&nbsp;
-            <span contenteditable="true" class="mwc-console-operation">find</span>&nbsp;
-            <span>.(</span>&nbsp;
-            <span contenteditable="true" class="mwc-console-query">{}</span>&nbsp;
-            <span>)</span>
+
+
+        <div class="container-fluid" style="padding-left:20px;">
+            <div class="row">
+                <div class="col-lg-9">
+                    <div style="width: 20px; float: left; display:table-cell;">
+                        <span class="fa fa-play hoverable-scale mwc-console-execute"
+                             style="padding-top:10px;"></span>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="input-group">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default dropdown-toggle mwc-console-first-operation"
+                                        data-toggle="dropdown"
+                                        aria-expanded="false">Action <span class="caret"></span></button>
+                                <ul class="dropdown-menu first-dropdown" role="menu">
+                                    <li><a href="#">find</a></li>
+                                    <li><a href="#">sort</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#">No action</a></li>
+                                </ul>
+                            </div>
+                            <input type="text" class="mwc-console-query form-control" aria-label="...">
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="input-group">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default dropdown-toggle mwc-console-second-operation"
+                                        data-toggle="dropdown"
+                                        aria-expanded="false">Action <span class="caret"></span></button>
+                                <ul class="dropdown-menu second-dropdown" role="menu">
+                                    <li><a href="#">find</a></li>
+                                    <li><a href="#">sort</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#">No action</a></li>
+                                </ul>
+                            </div>
+                            <input type="text" class="mwc-console-query form-control" aria-label="...">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
     </div>
 </script>
 
@@ -322,7 +359,7 @@
 
 <script type="text/x-handlebars-template" id="database-content-view-holder-empty-template">
     <span style="font-weight:bold">
-        Script executed successfully, but there is no results to show
+        Script executed successfully, but there is no results to show :)
     </span>
 </script>
 
@@ -386,7 +423,7 @@
         <div>
             {{#each collectionNames}}
             <div class="collectionName h-cursor-pointer" targetcoll="{{this}}">
-            <span><span class="fa fa-folder-o padding-lr-5"></span>{{this}}</span>
+                <span><span class="fa fa-folder-o padding-lr-5"></span>{{this}}</span>
             </div>
             {{/each}}
         </div>

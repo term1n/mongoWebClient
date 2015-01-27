@@ -117,10 +117,22 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
         initialize: function () {
             this.template = Handlebars.compile($("#database-console-template").html());
         },
+        onRender:function(){
+            var self = this;
+            this.$el.find(".first-dropdown li a").click(function(){
+                self.$el.find(".mwc-console-first-operation").text($(this).text());
+                self.$el.find(".mwc-console-first-operation").val($(this).text());
+            });
+            this.$el.find(".second-dropdown li a").click(function(){
+                self.$el.find(".mwc-console-second-operation").text($(this).text());
+                self.$el.find(".mwc-console-second-operation").val($(this).text());
+            });
+        },
         executeRequest: function(){
             var self = this;
             self.model.attributes["query"] = this.$el.find(".mwc-console-query").text();
             self.model.attributes["operation"] = this.$el.find(".mwc-console-operation").text();
+            console.log(self.model.attributes);
             $.ajax({
                 dataType: "json",
                 type: "GET",
