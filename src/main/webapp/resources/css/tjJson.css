@@ -31,6 +31,9 @@
 .tjJson-number {
     color: royalblue;
 }
+.tjJson-bool {
+    color: darkcyan;
+}
 .hoverable:hover{
     cursor: pointer;
 }

@@ -5,13 +5,13 @@ MongoWebClient.module("DatabaseConnection", function (DatabaseConnection, MongoW
     DatabaseConnection.Model = Backbone.Model.extend({
         defaults:{
             name:"myMongo",
-            host:"192.168.42.102",
+            host:"192.168.43.113",
             port:27017
         }
     });
     DatabaseConnection.Controller = {
         initView: function () {
-            MongoWebClient.databaseConnection = new DatabaseConnection.Show(new DatabaseConnection.Model({name:"name",host:"192.168.42.102",port:27017}));
+            MongoWebClient.databaseConnection = new DatabaseConnection.Show(new DatabaseConnection.Model({name:"name",host:"192.168.43.113",port:27017}));
 //            MongoWebClient.databaseConnection = new MongoWebClient.DatabaseConnection.Show(new DatabaseConnection.Model());
             MongoWebClient.connectionManagerRegion.show(MongoWebClient.databaseConnection);
             MongoWebClient.databaseConnection.$el.find(".dmcModal").draggable({

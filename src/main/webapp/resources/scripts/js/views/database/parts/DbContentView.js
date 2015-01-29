@@ -111,27 +111,35 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
         template: null,
         tagName: "div",
         className: "panel panel-default console-view",
-        events:{
-            "click .mwc-console-execute":"executeRequest"
+        events: {
+            "click .mwc-console-execute": "executeRequest",
+            "change .mwc-console-first-query": "changeFQuery",
+            "change .mwc-console-second-query": "changeSQuery"
+        },
+        changeFQuery: function (evt) {
+            this.model.attributes["fquery"] = evt.currentTarget.value;
+        },
+        changeSQuery: function (evt) {
+            this.model.attributes["squery"] = evt.currentTarget.value;
         },
         initialize: function () {
             this.template = Handlebars.compile($("#database-console-template").html());
         },
-        onRender:function(){
+        onRender: function () {
             var self = this;
-            this.$el.find(".first-dropdown li a").click(function(){
+            this.$el.find(".first-dropdown li a").click(function () {
                 self.$el.find(".mwc-console-first-operation").text($(this).text());
                 self.$el.find(".mwc-console-first-operation").val($(this).text());
+                self.model.attributes["foperation"] = $(this).text();
             });
-            this.$el.find(".second-dropdown li a").click(function(){
+            this.$el.find(".second-dropdown li a").click(function () {
                 self.$el.find(".mwc-console-second-operation").text($(this).text());
                 self.$el.find(".mwc-console-second-operation").val($(this).text());
+                self.model.attributes["soperation"] = $(this).text();
             });
         },
-        executeRequest: function(){
+        executeRequest: function () {
             var self = this;
-            self.model.attributes["query"] = this.$el.find(".mwc-console-query").text();
-            self.model.attributes["operation"] = this.$el.find(".mwc-console-operation").text();
             console.log(self.model.attributes);
             $.ajax({
                 dataType: "json",
@@ -140,7 +148,7 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
                 url: "/mongoWebClient/mongo/mongoConsole",
                 success: function (data) {
                     if (data.status === 'SUCCESS' && data.model) {
-                        self.trigger("event:refreshQueryResult",data.model,self.model.attributes);
+                        self.trigger("event:refreshQueryResult", data.model, self.model.attributes);
                     } else {
                         MongoWebClient.trigger("event:showErrorDialog", {modalHeader: "Error", modalBody: data.model});
                     }
@@ -165,33 +173,33 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
         events: {
             "click .mwc-prevPage": "goPrev",
             "click .mwc-nextPage": "goNext",
-            "change .mwc-skip":"changeSkip",
-            "change .mwc-limit":"changeLimit"
+            "change .mwc-skip": "changeSkip",
+            "change .mwc-limit": "changeLimit"
         },
-        fieldsChanged: function() {
+        fieldsChanged: function () {
             this.render();
         },
-        changeSkip:function(evt){
+        changeSkip: function (evt) {
             this.model.attributes.skip = evt.currentTarget.value;
             this.model.trigger("change");
             this.trigger("event:refreshView");
         },
-        changeLimit:function(evt){
+        changeLimit: function (evt) {
             this.model.attributes.limit = evt.currentTarget.value;
             this.model.trigger("change");
             this.trigger("event:refreshView");
         },
         goPrev: function () {
-            if(this.model.attributes.skip >= this.incr){
-                this.model.attributes.skip = this.model.attributes.skip-this.incr;
-                this.model.attributes.limit = this.model.attributes.limit-this.incr;
+            if (this.model.attributes.skip >= this.incr) {
+                this.model.attributes.skip = this.model.attributes.skip - this.incr;
+                this.model.attributes.limit = this.model.attributes.limit - this.incr;
                 this.model.trigger("change");
                 this.trigger("event:refreshView");
             }
         },
         goNext: function () {
-            this.model.attributes.skip =  this.model.attributes.skip+this.incr;
-            this.model.attributes.limit = this.model.attributes.limit+this.incr;
+            this.model.attributes.skip = this.model.attributes.skip + this.incr;
+            this.model.attributes.limit = this.model.attributes.limit + this.incr;
             this.model.trigger("change");
             this.trigger("event:refreshView");
         },
@@ -201,9 +209,9 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             this.template = Handlebars.compile($("#database-collection-attributes-view-template").html());
         },
         refreshTotal: function (query) {
-            if(!query){
+            if (!query) {
                 this.model.getTotal();
-            } else{
+            } else {
                 this.model.getTotal(query);
             }
             this.$el.find(".totalHolder").html(this.model.attributes.colSize);

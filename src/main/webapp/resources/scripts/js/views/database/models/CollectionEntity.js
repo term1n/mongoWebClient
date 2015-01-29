@@ -12,8 +12,10 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
         getTotal:function(query){
             var self = this;
             if(query){
-                self.attributes["operation"] = query["operation"];
-                self.attributes["query"] = query["query"];
+                self.attributes["foperation"] = query["foperation"];
+                self.attributes["soperation"] = query["soperation"];
+                self.attributes["fquery"] = query["fquery"];
+                self.attributes["squery"] = query["squery"];
             }
             $.ajax({
                 dataType: "json",
@@ -60,7 +62,7 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
     });
 
     DatabaseLayout.CollectionEntities = Backbone.Collection.extend({
-        url:"/mongoWebClient/mongo/viewPaginatedCollectionEntities",
+        url:"/mongoWebClient/mongo/mongoConsole",
         model:DatabaseLayout.Entity,
         comparator:"_id",
         initialize: function(opt){

@@ -68,8 +68,15 @@
                         data: data
                     }
                 }).render());
-            } else if (toType(data) == "number" || toType(data) == "boolean") {
+            } else if (toType(data) == "number") {
                 $container.append(new tjJsonApp.NumberView({
+                    model: {
+                        prop: name,
+                        data: data
+                    }
+                }).render());
+            } else if (toType(data) == "boolean") {
+                $container.append(new tjJsonApp.BooleanView({
                     model: {
                         prop: name,
                         data: data
@@ -92,15 +99,15 @@
                 "click .hoverable": "doToggle"
             },
             doToggle: function (evt) {
-                if(this.$el.find(".tjJson-string").first().is(':visible')){
+                if (this.$el.find(".tjJson-string").first().is(':visible')) {
                     this.$el.find(".tjJson-string").first().hide();
-                }else{
+                } else {
                     this.$el.find(".tjJson-string").first().show();
                 }
 
-                if(this.$el.find(".tjJson-string-short").first().is(':visible')){
+                if (this.$el.find(".tjJson-string-short").first().is(':visible')) {
                     this.$el.find(".tjJson-string-short").first().hide();
-                }else{
+                } else {
                     this.$el.find(".tjJson-string-short").first().show();
                 }
                 evt.stopPropagation();
@@ -110,7 +117,7 @@
             },
             render: function () {
                 this.$el.append(this.template(this.model));
-                if(this.model.data && this.model.data.length < 100){
+                if (this.model.data && this.model.data.length < 100) {
                     this.$el.find(".hoverable").removeClass("hoverable");
                 }
                 return this.$el;
@@ -119,6 +126,15 @@
         tjJsonApp.NumberView = tjJsonApp.View.extend({
             initialize: function () {
                 this.template = Handlebars.compile("{{#if prop}}<span class='tjJson-value'> {{prop}}: </span>{{/if}}<span class='tjJson-number'> {{data}}</span>");
+            },
+            render: function () {
+                this.$el.append(this.template(this.model));
+                return this.$el;
+            }
+        });
+        tjJsonApp.BooleanView = tjJsonApp.View.extend({
+            initialize: function () {
+                this.template = Handlebars.compile("{{#if prop}}<span class='tjJson-value'> {{prop}}: </span>{{/if}}<span class='tjJson-bool'> {{data}}</span>");
             },
             render: function () {
                 this.$el.append(this.template(this.model));
@@ -140,12 +156,12 @@
 })(window.jQuery);
 
 Handlebars.registerHelper("cutter", function (v1, op, v2, options) {
-    if(op == "longer"){
+    if (op == "longer") {
         if (v1.length > v2) {
-            if(v1.indexOf("<?xml version=") != -1){
+            if (v1.indexOf("<?xml version=") != -1) {
                 return "click to view xml";
             }
-            return v1.substring(0, v2).toString()+"...";
+            return v1.substring(0, v2).toString() + "...";
         } else {
             return v1;
         }

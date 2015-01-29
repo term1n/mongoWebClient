@@ -55,12 +55,12 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             $("#dbContent-tab-panel").on("click", selector, {elem: this}, this.doClose);
         },
         refreshView: function () {
-            this.attributesEl.currentView.refreshTotal();
-            this.contentEl.show(new DatabaseLayout.ContentViewHolder({collection: new DatabaseLayout.CollectionEntities(this.attributesEl.currentView.model.attributes).fetch()}));
+            console.log(this.consoleEl.currentView.model.attributes)
+            this.attributesEl.currentView.refreshTotal(this.consoleEl.currentView.model.attributes);
+            this.contentEl.show(new DatabaseLayout.ContentViewHolder({collection: new DatabaseLayout.CollectionEntities(this.consoleEl.currentView.model.attributes).fetch()}));
         },
         refreshQueryResult: function (data,query) {
             var coll = new DatabaseLayout.CollectionEntities(JSON.parse(data));
-            console.log(query)
             if(!query){
                 this.attributesEl.currentView.refreshTotal();
             } else{

@@ -302,17 +302,24 @@
     <div class="panel-body st_console">
 
 
-        <div class="container-fluid" style="padding-left:20px;">
-            <div class="row">
-                <div class="col-lg-9">
-                    <div style="width: 20px; float: left; display:table-cell;">
-                        <span class="fa fa-play hoverable-scale mwc-console-execute"
-                             style="padding-top:10px;"></span>
-                    </div>
-                    <div class="col-lg-4">
+        <div class="container-fluid">
+            <div class="row" style="padding-left:0px;">
+                <div class="col-lg-12" style="padding-left:0px;">
+                    <div class="col-lg-1">
                         <div class="input-group">
                             <div class="input-group-btn">
-                                <button type="button" class="btn btn-default dropdown-toggle mwc-console-first-operation"
+                                <button type="button" class="btn btn-warning dropdown-toggle mwc-console-execute" style="color:black;">
+                                    <span class="fa fa-play"></span> Run
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="input-group">
+                            <div class="input-group-btn">
+                                <button type="button"
+                                        style="color:black;"
+                                        class="btn btn-warning dropdown-toggle mwc-console-first-operation"
                                         data-toggle="dropdown"
                                         aria-expanded="false">Action <span class="caret"></span></button>
                                 <ul class="dropdown-menu first-dropdown" role="menu">
@@ -322,13 +329,15 @@
                                     <li><a href="#">No action</a></li>
                                 </ul>
                             </div>
-                            <input type="text" class="mwc-console-query form-control" aria-label="...">
+                            <input type="text" class="mwc-console-first-query form-control" aria-label="..." style="border-color:#de9b00;color:white;background:black;">
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-5">
                         <div class="input-group">
                             <div class="input-group-btn">
-                                <button type="button" class="btn btn-default dropdown-toggle mwc-console-second-operation"
+                                <button type="button"
+                                        style="color:black;"
+                                        class="btn btn-warning dropdown-toggle mwc-console-second-operation"
                                         data-toggle="dropdown"
                                         aria-expanded="false">Action <span class="caret"></span></button>
                                 <ul class="dropdown-menu second-dropdown" role="menu">
@@ -338,7 +347,7 @@
                                     <li><a href="#">No action</a></li>
                                 </ul>
                             </div>
-                            <input type="text" class="mwc-console-query form-control" aria-label="...">
+                            <input type="text" class="mwc-console-second-query form-control" aria-label="..." style="border-color:#de9b00;color:white;background:black;">
                         </div>
                     </div>
                 </div>
