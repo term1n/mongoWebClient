@@ -1,6 +1,7 @@
 /**
  * Created by manaev on 17.10.14.
  */
+
 var MongoWebClient = new Marionette.Application();
 
 MongoWebClient.addRegions({
@@ -39,12 +40,12 @@ MongoWebClient.on("event:showConfirmDialog", function (data) {
 });
 
 MongoWebClient.on("event:showDatabaseLayout", function (data) {
-    if(MongoWebClient.DatabaseLayout.Controller.addConnection(data)){
+    if (MongoWebClient.DatabaseLayout.Controller.addConnection(data)) {
         MongoWebClient.manualRegion.empty();
         MongoWebClient.DatabaseLayout.Controller.showDatabaseLayout();
     }
 });
-MongoWebClient.locate=function(event){
+MongoWebClient.locate = function (event) {
     var eventDoc, doc, body;
     event = event || window.event; // IE-ism
     if (event.pageX == null && event.clientX != null) {
@@ -55,10 +56,10 @@ MongoWebClient.locate=function(event){
             (doc && doc.scrollLeft || body && body.scrollLeft || 0) -
             (doc && doc.clientLeft || body && body.clientLeft || 0);
         event.pageY = event.clientY +
-            (doc && doc.scrollTop  || body && body.scrollTop  || 0) -
-            (doc && doc.clientTop  || body && body.clientTop  || 0 );
+            (doc && doc.scrollTop || body && body.scrollTop || 0) -
+            (doc && doc.clientTop || body && body.clientTop || 0 );
     }
-    return {top:event.pageY-5,left:event.pageX-5}
+    return {top: event.pageY - 5, left: event.pageX - 5}
 };
 
 

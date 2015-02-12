@@ -13,9 +13,8 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             var self = this;
             if(query){
                 self.attributes["foperation"] = query["foperation"];
-                self.attributes["soperation"] = query["soperation"];
                 self.attributes["fquery"] = query["fquery"];
-                self.attributes["squery"] = query["squery"];
+//              TODO  additional queries here
             }
             $.ajax({
                 dataType: "json",

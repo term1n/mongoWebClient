@@ -48,26 +48,49 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             this.listenTo(this.attributesEl.currentView, "event:refreshView", function () {
                 self.refreshView()
             });
-            this.listenTo(this.consoleEl.currentView, "event:refreshQueryResult", function (data,query) {
-                self.refreshQueryResult(data,query)
+            this.listenTo(this.attributesEl.currentView, "event:addEntry", function () {
+                var e_edb = new DatabaseLayout.EntityEditor({model: {header: "New Object", data: "", requestData: self.attributesEl.currentView.model.attributes}});
+                MongoWebClient.eEditRegion.show(e_edb);
+                e_edb.showDialog();
+                self.listenTo(e_edb,"event:refreshViewAfterUpdate",function(){self.refreshView()});
+            });
+
+            this.listenTo(this.consoleEl.currentView, "event:refreshQueryResult", function (data, query) {
+                self.refreshQueryResult(data, query)
             });
             var selector = "." + this.model.attributes.contentId + " .close";
             $("#dbContent-tab-panel").on("click", selector, {elem: this}, this.doClose);
         },
+        toType: function (obj) {
+            return ({}).toString.call(obj).match(/\s([a-z|A-Z]+)/)[1].toLowerCase();
+        },
         refreshView: function () {
-            console.log(this.consoleEl.currentView.model.attributes)
+            this.consoleEl.currentView.model.attributes.limit = this.attributesEl.currentView.model.attributes.limit
+            this.consoleEl.currentView.model.attributes.skip = this.attributesEl.currentView.model.attributes.skip
             this.attributesEl.currentView.refreshTotal(this.consoleEl.currentView.model.attributes);
             this.contentEl.show(new DatabaseLayout.ContentViewHolder({collection: new DatabaseLayout.CollectionEntities(this.consoleEl.currentView.model.attributes).fetch()}));
         },
-        refreshQueryResult: function (data,query) {
-            var coll = new DatabaseLayout.CollectionEntities(JSON.parse(data));
-            if(!query){
-                this.attributesEl.currentView.refreshTotal();
-            } else{
-                this.attributesEl.currentView.refreshTotal(query);
+//        TODO actually deprecated method
+        refreshQueryResult: function (data, query) {
+            if (this.toType(JSON.parse(data)) == "number") {
+                var coll = new DatabaseLayout.CollectionEntities([{numb:data}]);
+                this.attributesEl.currentView.setTotal(data);
+                this.consoleEl.currentView.model.attributes.limit = this.attributesEl.currentView.model.attributes.limit;
+                this.consoleEl.currentView.model.attributes.skip = this.attributesEl.currentView.model.attributes.skip;
+                coll.requestData = this.attributesEl.currentView.model.attributes;
+                this.contentEl.show(new DatabaseLayout.ContentViewHolder({collection: coll}));
+            } else {
+                var coll = new DatabaseLayout.CollectionEntities(JSON.parse(data));
+                if (!query) {
+                    this.attributesEl.currentView.refreshTotal();
+                } else {
+                    this.attributesEl.currentView.refreshTotal(query);
+                }
+                this.consoleEl.currentView.model.attributes.limit = this.attributesEl.currentView.model.attributes.limit;
+                this.consoleEl.currentView.model.attributes.skip = this.attributesEl.currentView.model.attributes.skip;
+                coll.requestData = this.attributesEl.currentView.model.attributes;
+                this.contentEl.show(new DatabaseLayout.ContentViewHolder({collection: coll}));
             }
-            coll.requestData = this.attributesEl.currentView.model.attributes;
-            this.contentEl.show(new DatabaseLayout.ContentViewHolder({collection: coll}));
 
         },
         doClose: function (evt) {
@@ -91,4 +114,5 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             childView.model.set("contentId", temp);
         }
     });
-});
+})
+;

@@ -182,7 +182,7 @@
 </script>
 
 <script type="text/x-handlebars-template" id="common-success-modal-dialog">
-    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="smallModal" aria-hidden="true">
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="smallModal" aria-hidden="true" style="z-index:10000">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header modal-header-success">
@@ -201,7 +201,7 @@
 </script>
 
 <script type="text/x-handlebars-template" id="common-confirm-modal-dialog">
-    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="smallModal" aria-hidden="true">
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="smallModal" aria-hidden="true" style="z-index:10000">
         <div class="modal-dialog modal-sm">
             <div class="modal-content panel-warning">
                 <div class="modal-header panel-heading modal-header-confirm">
@@ -232,7 +232,7 @@
 
 
 <script type="text/x-handlebars-template" id="common-error-modal-dialog">
-    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="smallModal" aria-hidden="true">
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="smallModal" aria-hidden="true" style="z-index:10000">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header modal-header-error">
@@ -261,23 +261,28 @@
         </div>
         <div class="container-fluid" style="padding-left:0px;">
             <div class="col-lg-2 col-sm-2 col-xs-2" style="padding-left:0px;">
-                <button type="button" class="btn btn-default mwc-refresh ">
+                <button type="button" class="btn btn-warning mwc-refresh "  style="color:black">
                     <span class="fa fa-refresh"> Refresh</span>
+                </button>
+            </div>
+            <div class="col-lg-2 col-sm-2 col-xs-2" style="padding-left:0px;">
+                <button type="button" class="btn btn-warning mwc-addEntry" style="color:black">
+                    <span class="fa fa-plus-square"> AddEntry</span>
                 </button>
             </div>
             <div class="col-lg-3 col-sm-3 col-xs-3" style="float:right;">
                 <div class="col-lg-6 col-sm-6 col-xs-6" style="padding-right:2px;">
                     <div class="input-group">
-                             <span class="input-group-addon h-cursor-pointer mwc-prevPage">
+                             <span class="input-group-addon h-cursor-pointer mwc-prevPage mwc-paginating">
                                  <span class=" fa fa-chevron-left" aria-hidden="true"></span>
                              </span>
-                        <input type="text" class="form-control mwc-skip" value="{{skip}}"/>
+                        <input type="text" class="form-control mwc-skip" value="{{skip}}" style="border-color:#de9b00;"/>
                     </div>
                 </div>
                 <div class="col-lg-6 col-sm-6 col-xs-6" style="padding-left:2px;">
                     <div class="input-group">
-                        <input type="text" class="form-control mwc-limit" value="{{limit}}"/>
-                             <span class="input-group-addon h-cursor-pointer mwc-nextPage">
+                        <input type="text" class="form-control mwc-limit" style="border-color:#de9b00;" value="{{limit}}"/>
+                             <span class="input-group-addon h-cursor-pointer mwc-nextPage mwc-paginating">
                                  <span class=" fa fa-chevron-right"></span>
                              </span>
                     </div>
@@ -298,17 +303,43 @@
     </div>
 </script>
 
+<script type="text/x-handlebars-template" id="database-console-add-operation-template">
+    <div class="col-lg-12" style="padding-left:0px;">
+        <div class="col-lg-1">
+        </div>
+        <div class="col-lg-5">
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button type="button"
+                            style="color:black;"
+                            class="btn btn-default dropdown-toggle mwc-console-operation"
+                            data-toggle="dropdown"
+                            aria-expanded="false">Action <span class="caret"></span></button>
+                    <ul class="dropdown-menu operation-dropdown" role="menu">
+                        <li><a href="#">FIND</a></li>
+                        <li><a href="#">SORT</a></li>
+                        <li><a href="#">COUNT</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">No action</a></li>
+                    </ul>
+                </div>
+                <input type="text" class="mwc-console-query form-control" aria-label="..."
+                       style="border-color:#de9b00;color:white;background:black;">
+            </div>
+        </div>
+    </div>
+</script>
+
 <script type="text/x-handlebars-template" id="database-console-template">
     <div class="panel-body st_console">
-
-
-        <div class="container-fluid">
-            <div class="row" style="padding-left:0px;">
+        <div class="container-fluid operation-container">
+            <div class="row console-operation-pb">
                 <div class="col-lg-12" style="padding-left:0px;">
                     <div class="col-lg-1">
                         <div class="input-group">
                             <div class="input-group-btn">
-                                <button type="button" class="btn btn-warning dropdown-toggle mwc-console-execute" style="color:black;">
+                                <button type="button" class="btn btn-default dropdown-toggle mwc-console-execute"
+                                        style="color:black;">
                                     <span class="fa fa-play"></span> Run
                                 </button>
                             </div>
@@ -319,35 +350,29 @@
                             <div class="input-group-btn">
                                 <button type="button"
                                         style="color:black;"
-                                        class="btn btn-warning dropdown-toggle mwc-console-first-operation"
+                                        class="btn btn-default dropdown-toggle mwc-console-first-operation"
                                         data-toggle="dropdown"
                                         aria-expanded="false">Action <span class="caret"></span></button>
                                 <ul class="dropdown-menu first-dropdown" role="menu">
-                                    <li><a href="#">find</a></li>
-                                    <li><a href="#">sort</a></li>
+                                    <li><a href="#">FIND</a></li>
+                                    <li><a href="#">SORT</a></li>
+                                    <li><a href="#">COUNT</a></li>
                                     <li class="divider"></li>
                                     <li><a href="#">No action</a></li>
                                 </ul>
                             </div>
-                            <input type="text" class="mwc-console-first-query form-control" aria-label="..." style="border-color:#de9b00;color:white;background:black;">
+                            <input type="text" class="mwc-console-first-query form-control" aria-label="..."
+                                   style="border-color:#de9b00;color:white;background:black;">
                         </div>
                     </div>
                     <div class="col-lg-5">
                         <div class="input-group">
                             <div class="input-group-btn">
-                                <button type="button"
-                                        style="color:black;"
-                                        class="btn btn-warning dropdown-toggle mwc-console-second-operation"
-                                        data-toggle="dropdown"
-                                        aria-expanded="false">Action <span class="caret"></span></button>
-                                <ul class="dropdown-menu second-dropdown" role="menu">
-                                    <li><a href="#">find</a></li>
-                                    <li><a href="#">sort</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="#">No action</a></li>
-                                </ul>
+                                <button type="button" class="btn btn-default dropdown-toggle mwc-console-add-operation"
+                                        style="color:black;">
+                                    <span class="fa fa-plus-square"></span> Add operation
+                                </button>
                             </div>
-                            <input type="text" class="mwc-console-second-query form-control" aria-label="..." style="border-color:#de9b00;color:white;background:black;">
                         </div>
                     </div>
                 </div>
@@ -358,12 +383,18 @@
 </script>
 
 <script type="text/x-handlebars-template" id="database-content-view-template">
+    {{#if _id.$oid}}
     <div class="contentViewHeader list-group" style="margin-bottom:0;">
         <a class="list-group-item collection-element-id-view hoverable">ObjectId("{{_id.$oid}}")</a>
     </div>
     <div class="contentViewBody hidden">
 
     </div>
+    {{else}}
+    <div class="contentViewHeader-num list-group" style="margin-bottom:0;">
+        <a class="list-group-item collection-element-id-view-num hoverable">{{numb}}</a>
+    </div>
+    {{/if}}
 </script>
 
 <script type="text/x-handlebars-template" id="database-content-view-holder-empty-template">
@@ -465,6 +496,66 @@
 </script>
 
 <script type="text/javascript">
+    function ajaxindicatorstart(text)
+    {
+        if(jQuery('body').find('#resultLoading').attr('id') != 'resultLoading'){
+            jQuery('body').append('<div id="resultLoading" style="display:none"><div><img src=\"<c:url value='/resources/css/ajax-loader.gif'/>\"<div></div></div><div class="bg"></div></div>');
+        }
+
+        jQuery('#resultLoading').css({
+            'width':'100%',
+            'height':'100%',
+            'position':'fixed',
+            'opacity':'0.5',
+            'z-index':'10000000',
+            'top':'0',
+            'left':'0',
+            'right':'0',
+            'bottom':'0',
+            'margin':'auto',
+            'background':'none repeat scroll 0 0 black'
+        });
+
+        jQuery('#resultLoading .bg').css({
+            'background':'#000000',
+            'opacity':'0.7',
+            'width':'100%',
+            'height':'100%',
+            'position':'absolute',
+            'top':'0'
+        });
+
+        jQuery('#resultLoading>div:first').css({
+            'width': '250px',
+            'height':'75px',
+            'text-align': 'center',
+            'position': 'fixed',
+            'top':'0',
+            'left':'0',
+            'right':'0',
+            'bottom':'0',
+            'margin':'auto',
+            'font-size':'16px',
+            'z-index':'10',
+            'color':'#ffffff'
+
+        });
+
+        jQuery('#resultLoading .bg').height('100%');
+        jQuery('#resultLoading').fadeIn();
+        jQuery('body').css('cursor', 'wait');
+    }
+    function ajaxindicatorstop()
+    {
+        jQuery('#resultLoading .bg').height('100%');
+        jQuery('#resultLoading').fadeOut();
+        jQuery('body').css('cursor', 'default');
+    }
+    jQuery(document).ajaxStart(function () {
+        ajaxindicatorstart();
+    }).ajaxStop(function () {
+        ajaxindicatorstop();
+    });
     MongoWebClient.username = "${pageContext.request.userPrincipal.name}";
     MongoWebClient.start();
 </script>

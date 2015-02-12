@@ -7,17 +7,17 @@ import com.mongodb.util.*;
 import lombok.extern.log4j.*;
 import org.bson.types.*;
 import org.codehaus.jackson.*;
-import org.codehaus.jackson.map.*;
-import org.codehaus.jackson.type.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
+import ru.spb.iac.enums.*;
 import ru.spb.iac.exceptions.MongoException;
 import ru.spb.iac.services.*;
+import ru.spb.iac.services.impl.mongo.*;
 import ru.spb.iac.ui.*;
 import ru.spb.iac.ui.models.*;
+import ru.spb.iac.ui.models.database.*;
 
-import javax.annotation.*;
 import javax.servlet.http.*;
 import java.io.*;
 import java.util.*;
@@ -35,18 +35,12 @@ public class MongoContentController extends CommonController {
     MongoService mongoService;
 
     @Autowired
+    @Qualifier("consoleComposerService")
+    ConsoleComposer composer;
+
+    @Autowired
     @Qualifier("mongoTemplateFactory")
     MongoTemplateFactory mongoFactory;
-
-    Map<String, Integer> operationsMap;
-
-    @PostConstruct
-    public void initOperationsMap() {
-        operationsMap = new TreeMap<String, Integer>();
-        operationsMap.put("find", 1);
-        operationsMap.put("sort", 2);
-        operationsMap.put("No action", 3);
-    }
 
     /**
      * get map of database names and collections in the database
@@ -85,26 +79,26 @@ public class MongoContentController extends CommonController {
     void collectionSize(MongoAddress address, HttpServletResponse response,
                         @RequestParam(required = false, value = "fquery") String fquery,
                         @RequestParam(required = false, value = "foperation") String foperation,
-                        @RequestParam(required = false, value = "squery") String squery,
-                        @RequestParam(required = false, value = "soperation") String soperation) throws IOException {
+                        @RequestParam(value = "dbOper", required = false) String dbOper,
+                        @RequestParam(value = "skip", required = false) String skip
+    ) throws IOException {
         if (hasHostPortDbNColl(address)) {
             try {
+                Integer iSkip = null;
+                if(Strings.isNullOrEmpty(skip)){
+                    iSkip = 0;
+                }else{
+                    iSkip = Ints.tryParse(skip);
+                }
                 mongoFactory.initMap(address);
-
                 if (!Strings.isNullOrEmpty(fquery)) {
-                    BasicDBObject criteria = composeCriteria(fquery);
-
-                    switch (operationsMap.get(foperation)) {
-                        case 1: {
-                            writeSuccessAjaxResponse(response, JSON.serialize(mongoService.collectionSize(address, criteria)));
-                            break;
-                        }
-                        default: {
-                            writeErrorAjaxResponse(response, new AjaxResponse("UNSUPPORTED OPERATION"));
-                        }
+                    if(OperationTypes.valueOf(foperation) == OperationTypes.FIND){
+                        writeSuccessAjaxResponse(response, JSON.serialize(mongoService.collectionSize(address, composer.composeCriteria(fquery))-iSkip));
+                    }else{
+                        writeSuccessAjaxResponse(response, "NaN");
                     }
                 } else {
-                    writeSuccessAjaxResponse(response, JSON.serialize(mongoService.collectionSize(address)));
+                    writeSuccessAjaxResponse(response, JSON.serialize(mongoService.collectionSize(address)-iSkip));
                 }
 
             } catch (MongoException e) {
@@ -114,20 +108,6 @@ public class MongoContentController extends CommonController {
         } else {
             writeErrorAjaxResponse(response, "Host or port or database or collection is undefined");
         }
-    }
-
-    private BasicDBObject composeCriteria(String query) throws IOException {
-        BasicDBObject criteria = new BasicDBObject();
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String, Object> map = mapper.readValue(
-                query,
-                new TypeReference<Map<String, Object>>() {
-                }
-        );
-        for (String key : map.keySet()) {
-            criteria.put(key, map.get(key));
-        }
-        return criteria;
     }
 
     /**
@@ -256,52 +236,31 @@ public class MongoContentController extends CommonController {
         }
     }
 
+    @Autowired
+    @Qualifier("mongoServiceBasicOperations")
+    MongoServiceBasicOperations basicOperations;
+
     @RequestMapping(value = "/mongoConsole", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
     public
     @ResponseBody
+    @SuppressWarnings("unchecked")
     void console(MongoAddress address,
                  @RequestParam(value = "fquery", required = false) String fquery, @RequestParam(value = "foperation", required = false) String foperation,
-                 @RequestParam(value = "squery", required = false) String squery, @RequestParam(value = "soperation", required = false) String soperation,
+                 @RequestParam(value = "dbOper", required = false) String dbOper,
                  @RequestParam(value = "skip", required = false) String skip, @RequestParam(value = "limit", required = false) String limit,
                  HttpServletResponse response) {
         if (hasHostPortDbNColl(address) && Strings.isNullOrEmpty(foperation)) {
             viewPaginatedCollectionEntities(address, skip, limit, response);
-        } else if (hasHostPortDbNColl(address) && operationsMap.containsKey(foperation) && !Strings.isNullOrEmpty(fquery)) {
+        } else if (hasHostPortDbNColl(address)) {
+            DbOperations operations = null;
+            if (!Strings.isNullOrEmpty(dbOper)) {
+                operations = gson.fromJson(dbOper, DbOperations.class);
+            }
             try {
                 mongoFactory.initMap(address);
-                BasicDBObject fcriteria = composeCriteria(fquery);
-                BasicDBObject scriteria = null;
-                if(!Strings.isNullOrEmpty(squery)){
-                    scriteria = composeCriteria(squery);
-                }
-                switch (operationsMap.get(foperation)) {
-                    case 1: {
-                        if(Strings.isNullOrEmpty(soperation)){
-                            writeSuccessAjaxResponse(response, JSON.serialize(mongoService.find(address, fcriteria, new BasicDBObject("_id", true), Ints.tryParse(skip), Ints.tryParse(limit))));
-                            break;
-                        }else{
-                            switch (operationsMap.get(soperation)){
-                                case 1:{
-                                    writeErrorAjaxResponse(response, new AjaxResponse("UNSUPPORTED OPERATION"));
-                                    break;
-                                }
-                                case 2:{
-                                    writeErrorAjaxResponse(response, new AjaxResponse("UNSUPPORTED OPERATION"));
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    case 2:{
-                        viewPaginatedCollectionEntities(address, skip, limit, response);
-                    }
-                    default: {
-                        writeErrorAjaxResponse(response, new AjaxResponse("UNSUPPORTED OPERATION"));
-                        break;
-                    }
-                }
-
-
+                assert operations != null;
+                operations.getOperations().add(new CommonDbOperation(foperation, fquery, 0));
+                writeSuccessAjaxResponse(response, JSON.serialize(composer.execute(address, operations, Ints.tryParse(skip), Ints.tryParse(limit))));
             } catch (MongoException e) {
                 log.error(e.getMessage(), e);
                 writeErrorAjaxResponse(response, e.getMessage());
@@ -312,9 +271,8 @@ public class MongoContentController extends CommonController {
                 log.error(e.getMessage(), e);
                 writeErrorAjaxResponse(response, e.getMessage());
             }
-        } else {
-            writeErrorAjaxResponse(response, "Host or port or database or collection or query is undefined");
         }
+
     }
 
 

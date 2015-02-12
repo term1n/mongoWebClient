@@ -27,5 +27,6 @@ public interface MongoService {
     public void dropCollection(MongoAddress mongoAddress) throws MongoException;
     public long collectionSize(MongoAddress mongoAddress) throws MongoException;
     public long collectionSize(MongoAddress mongoAddress,BasicDBObject criteria) throws MongoException;
+    public DBCollection getCollection(MongoAddress mongoAddress) throws MongoException;
 
 }

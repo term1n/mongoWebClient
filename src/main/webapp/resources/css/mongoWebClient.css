@@ -6,6 +6,11 @@ body {
 .h-cursor-pointer:hover{
     cursor: pointer;
 }
+.mwc-paginating{
+    background-image: linear-gradient(to bottom, #ffbb1c 0%, #e8a300 100%);
+    background-repeat: repeat-x;
+    border-color: #de9b00;
+}
 .main-region{
     padding-top: 10px;
 }
@@ -61,7 +66,14 @@ body {
 .collection-element-id-view{
     border:0;font-weight:bold;
 }
+.collection-element-id-view-num{
+    border:0;font-weight:bold;
+}
 .list-group-item.collection-element-id-view:first-child{
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+.list-group-item.collection-element-id-view-num:first-child{
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }

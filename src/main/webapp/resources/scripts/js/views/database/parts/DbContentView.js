@@ -107,6 +107,31 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
         }
     });
 
+    DatabaseLayout.AdditionalOperation = Backbone.Marionette.ItemView.extend({
+        template:null,
+        className:"row console-operation-pb",
+        tagName:"div",
+        events: {
+            "change .mwc-console-query": "changeQuery"
+        },
+        initialize: function(){
+            this.template = Handlebars.compile($("#database-console-add-operation-template").html());
+        },
+        changeQuery: function (evt) {
+            this.model["query"] = evt.currentTarget.value;
+            this.trigger("event:collectAttributes");
+        },
+        onRender: function () {
+            var self = this;
+            this.$el.find(".operation-dropdown li a").click(function () {
+                self.model["operation"] = $(this).text();
+                self.$el.find(".mwc-console-operation").text($(this).text());
+                self.$el.find(".mwc-console-operation").val($(this).text());
+                self.trigger("event:collectAttributes");
+            });
+        }
+    });
+
     DatabaseLayout.ConsoleView = Backbone.Marionette.ItemView.extend({
         template: null,
         tagName: "div",
@@ -114,16 +139,34 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
         events: {
             "click .mwc-console-execute": "executeRequest",
             "change .mwc-console-first-query": "changeFQuery",
-            "change .mwc-console-second-query": "changeSQuery"
+            "click .mwc-console-add-operation":"addOperation"
+        },
+        addOperation: function(){
+            this.operationsOrder++;
+            if(this.additionalOperations == null){
+                this.additionalOperations = [];
+            }
+            var temp = new DatabaseLayout.AdditionalOperation({model : new DatabaseLayout.Entity({order: this.operationsOrder})});
+            this.additionalOperations.push(temp);
+            var self = this;
+            this.listenTo(temp, "event:collectAttributes", function () {
+                self.collectOperations()
+            });
+            this.$el.find(".operation-container").append(temp.render().$el);
         },
         changeFQuery: function (evt) {
             this.model.attributes["fquery"] = evt.currentTarget.value;
         },
-        changeSQuery: function (evt) {
-            this.model.attributes["squery"] = evt.currentTarget.value;
+        collectOperations:function(){
+            this.model.attributes.dbOper = [];
+            _.each(this.additionalOperations,function(operand){
+                this.model.attributes.dbOper.push({operation:operand.model["operation"],query:operand.model["query"], order:operand.model.attributes["order"]});
+            },this);
+            this.model.attributes.dbOper = JSON.stringify({operations:this.model.attributes.dbOper});
         },
         initialize: function () {
             this.template = Handlebars.compile($("#database-console-template").html());
+            this.operationsOrder = 0;
         },
         onRender: function () {
             var self = this;
@@ -132,15 +175,10 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
                 self.$el.find(".mwc-console-first-operation").val($(this).text());
                 self.model.attributes["foperation"] = $(this).text();
             });
-            this.$el.find(".second-dropdown li a").click(function () {
-                self.$el.find(".mwc-console-second-operation").text($(this).text());
-                self.$el.find(".mwc-console-second-operation").val($(this).text());
-                self.model.attributes["soperation"] = $(this).text();
-            });
         },
         executeRequest: function () {
             var self = this;
-            console.log(self.model.attributes);
+            this.collectOperations();
             $.ajax({
                 dataType: "json",
                 type: "GET",
@@ -165,7 +203,8 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
         tagName: "div",
         className: "panel panel-default attributes-view",
         triggers: {
-            "click .mwc-refresh": "event:refreshView"
+            "click .mwc-refresh": "event:refreshView",
+            "click .mwc-addEntry":"event:addEntry"
         },
         modelEvents: {
             'change': 'fieldsChanged'
@@ -180,12 +219,12 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             this.render();
         },
         changeSkip: function (evt) {
-            this.model.attributes.skip = evt.currentTarget.value;
+            this.model.attributes.skip = parseInt(evt.currentTarget.value);
             this.model.trigger("change");
             this.trigger("event:refreshView");
         },
         changeLimit: function (evt) {
-            this.model.attributes.limit = evt.currentTarget.value;
+            this.model.attributes.limit = parseInt(evt.currentTarget.value);
             this.model.trigger("change");
             this.trigger("event:refreshView");
         },
@@ -207,6 +246,9 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             this.incr = 50;
             this.model = opt;
             this.template = Handlebars.compile($("#database-collection-attributes-view-template").html());
+        },
+        setTotal:function(data){
+            this.$el.find(".totalHolder").html(data);
         },
         refreshTotal: function (query) {
             if (!query) {
@@ -238,7 +280,6 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             }
         },
         maximizePre: function () {
-            console.log("maximize");
             this.$el.find("pre").toggleClass("mwc-edit-sm-h");
         },
         render: function () {
@@ -246,6 +287,7 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             return this.$el;
         },
         bSave: function () {
+            var self = this;
             if (this.bValidate()) {
                 this.closeDialog();
                 var dataToSend = JSON.parse(JSON.stringify(this.model.requestData));
@@ -258,6 +300,7 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
                     url: "/mongoWebClient/mongo/updateEntity",
                     success: function (data) {
                         if (data.status === 'SUCCESS' && data.model) {
+                            self.trigger("event:refreshViewAfterUpdate");
                             MongoWebClient.trigger("event:showSuccessDialog", {modalHeader: "Success", modalBody: "Object updated"})
                         } else {
                             MongoWebClient.trigger("event:showErrorDialog", {modalHeader: "Error", modalBody: data.model});
@@ -276,5 +319,7 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             this.$el.find('.modal').modal('hide');
         }
     })
+
+
 
 });
