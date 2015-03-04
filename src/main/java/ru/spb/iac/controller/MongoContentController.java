@@ -8,6 +8,7 @@ import lombok.extern.log4j.*;
 import org.bson.types.*;
 import org.codehaus.jackson.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.security.access.prepost.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
 import ru.spb.iac.enums.*;
@@ -152,7 +153,7 @@ public class MongoContentController extends CommonController {
             writeErrorAjaxResponse(response, "Host or port or database or collection is undefined");
         }
     }
-
+    @PreAuthorize("hasRole('ROLE_PRUSER')")
     @RequestMapping(value = "/updateEntity", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
     public
     @ResponseBody
@@ -171,7 +172,7 @@ public class MongoContentController extends CommonController {
             writeErrorAjaxResponse(response, "Host or port or database or collection is undefined");
         }
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value = "/dropCollection", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
     public
     @ResponseBody
@@ -189,7 +190,7 @@ public class MongoContentController extends CommonController {
             writeErrorAjaxResponse(response, "Host or port or database or collection is undefined");
         }
     }
-
+    @PreAuthorize("hasRole('ROLE_PRUSER')")
     @RequestMapping(value = "/deleteEntity", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
     public
     @ResponseBody

@@ -5,25 +5,39 @@
 	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 	http://www.springframework.org/schema/security
 	http://www.springframework.org/schema/security/spring-security-3.2.xsd">
-    <http auto-config="true">
-        <intercept-url pattern="/mongoWebClient/**" access="ROLE_USER" />
-        <intercept-url method="POST" pattern="/mongoWebClient/mongo/updateEntity" access="ROLE_USER" />
+    <http auto-config="true" use-expressions="true">
+        <intercept-url pattern="/registration/**" access="isAnonymous()" />
+        <intercept-url pattern="/registerUser/**" access="isAnonymous()" />
+        <intercept-url pattern="/login/**" access="isAnonymous()" />
+        <intercept-url pattern="/j_spring_security_check/**" access="isAnonymous()" />
+        <intercept-url pattern="/mongoWebClient/" access="isAuthenticated()" />
+        <intercept-url pattern="/mongoWebClient/mongo/getMongoInfo" access="isAuthenticated()" />
+        <intercept-url pattern="/mongoWebClient/mongo/collectionSize" access="isAuthenticated()" />
+        <intercept-url pattern="/mongoWebClient/mongo/collectionSize" access="isAuthenticated()" />
+        <intercept-url pattern="/mongoWebClient/mongo/viewCollectionEntities" access="isAuthenticated()" />
+        <intercept-url pattern="/mongoWebClient/mongo/viewCollectionEntity" access="isAuthenticated()" />
+        <intercept-url pattern="/mongoWebClient/mongo/mongoConsole" access="isAuthenticated()" />
+        <intercept-url pattern="/mongoWebClient/mongo/testMongoConnection" access="isAuthenticated()" />
+        <intercept-url pattern="/mongoWebClient/mongo/createMongoConnection" access="isAuthenticated()" />
         <form-login
                 login-page="/login"
                 default-target-url="/mongoWebClient"
                 authentication-failure-url="/login?error"
                 username-parameter="username"
-                password-parameter="password" />
-        <logout logout-success-url="/login?logout" />
+                password-parameter="password"/>
+        <logout logout-success-url="/login?logout" invalidate-session="true"/>
         <!-- enable csrf protection -->
         <csrf/>
     </http>
+    <global-method-security pre-post-annotations="enabled"/>
+    <beans:bean id="authProv" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+        <beans:property name="userDetailsService" ref="mwcDetailsService"/>
+        <beans:property name="passwordEncoder" ref="encoder"/>
+    </beans:bean>
+    <beans:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 
     <authentication-manager>
-        <authentication-provider>
-            <user-service>
-                <user name="user" password="spbIACMongoUser" authorities="ROLE_USER" />
-            </user-service>
+        <authentication-provider ref="authProv">
         </authentication-provider>
     </authentication-manager>
 
