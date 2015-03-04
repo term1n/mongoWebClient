@@ -17,6 +17,7 @@
     <script src="<c:url value="/resources/scripts/libs/handlebars-v2.0.0.js"/>"></script>
     <script src="<c:url value="/resources/scripts/libs/bootstrap.3.2.0.js"/>"></script>
     <script src="<c:url value="/resources/scripts/libs/jquery.jtJson.js"/>"></script>
+    <script src="<c:url value="/resources/scripts/libs/jquery.Autogrow.lined.js"/>"></script>
 
     <link href="<c:url value="/resources/css/bootstrap.3.2.0.css"/>" rel="stylesheet"/>
     <link href="<c:url value="/resources/css/boot-admin-main.css"/>" rel="stylesheet"/>

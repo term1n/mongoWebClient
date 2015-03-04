@@ -121,36 +121,30 @@ body {
     height: 600px;
 }
 
+.mwc-edit-bg-h{
+    height: 100%;
+}
+
 .modal-header .maximize {
     margin-right: 10px;
-    margin-top: 1px;
+}
+.editor{
+    width: 100%;
+    line-height: 24px;
+    border: none;
 }
 
-.maximize {
-    float: right;
-    font-size: 21px;
-    font-weight: 700;
-    line-height: 1;
-    color: #000;
-    text-shadow: 0 1px 0 #fff;
-    filter: alpha(opacity=20);
-    opacity: .2
+.lrows{
+    border-right: solid medium #de9b00;
 }
 
-.maximize:hover, .maximize:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
-    filter: alpha(opacity=50);
-    opacity: .5
+.modal-max-height-600{
+    max-height: 400px !important;
+    overflow: auto;
 }
 
-button.maximize {
-    -webkit-appearance: none;
-    padding: 0;
-    cursor: pointer;
-    background: 0 0;
-    border: 0
+.modal-max-height-all{
+    max-height: 100% !important;
 }
 
 .padding-lr-5{

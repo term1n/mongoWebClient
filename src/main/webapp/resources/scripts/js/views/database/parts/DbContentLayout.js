@@ -70,7 +70,6 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             this.attributesEl.currentView.refreshTotal(this.consoleEl.currentView.model.attributes);
             this.contentEl.show(new DatabaseLayout.ContentViewHolder({collection: new DatabaseLayout.CollectionEntities(this.consoleEl.currentView.model.attributes).fetch()}));
         },
-//        TODO actually deprecated method
         refreshQueryResult: function (data, query) {
             if (this.toType(JSON.parse(data)) == "number") {
                 var coll = new DatabaseLayout.CollectionEntities([{numb:data}]);
@@ -81,11 +80,7 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
                 this.contentEl.show(new DatabaseLayout.ContentViewHolder({collection: coll}));
             } else {
                 var coll = new DatabaseLayout.CollectionEntities(JSON.parse(data));
-                if (!query) {
-                    this.attributesEl.currentView.refreshTotal();
-                } else {
-                    this.attributesEl.currentView.refreshTotal(query);
-                }
+                this.attributesEl.currentView.refreshTotal(query);
                 this.consoleEl.currentView.model.attributes.limit = this.attributesEl.currentView.model.attributes.limit;
                 this.consoleEl.currentView.model.attributes.skip = this.attributesEl.currentView.model.attributes.skip;
                 coll.requestData = this.attributesEl.currentView.model.attributes;

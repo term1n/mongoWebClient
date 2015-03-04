@@ -153,26 +153,30 @@
         <div class="modal-dialog modal-lg mwc-modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <button type="button" class="maximize" aria-hidden="true">&curren;</button>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="fa fa-close"></span></button>
+                    <button type="button" class="maximize close" aria-hidden="true"><span class="fa fa-square"></span></button>
                     <h4 class="modal-title">Edit entry id: <span style="font-weight:bold">{{header}}</span></h4>
                 </div>
-                <div class="modal-body t-a-l">
-                    <pre class="mwc-wrap mwc-edit-sm-h" contenteditable="true">
-                            {{json data}}
-                    </pre>
+                <div class="modal-body t-a-l modal-max-height-600">
+                    <div class="row">
+                        <div class="col-mwcC lrows">
+                        </div>
+                        <div class="col-lg-11 autogrowContext">
+                            <textarea class="mwc-wrap mwc-edit-sm-h editor">{{json data}}</textarea>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <div class="form-group">
                         <div class="col-lg-4 t-a-l">
-                            <button type="button" class="btn btn-info btn-lg validate">Validate
+                            <button type="button" class="btn btn-default btn-lg validate">Validate
                             </button>
                         </div>
                         <div class="col-lg-6 t-a-r">
                             <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">Cancel</button>
                         </div>
                         <div class="col-lg-2">
-                            <button type="button" class="btn btn-danger save btn-lg">Save</button>
+                            <button type="button" class="btn btn-warning save btn-lg" style="color:black">Save</button>
                         </div>
                     </div>
                 </div>

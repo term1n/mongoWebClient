@@ -265,22 +265,22 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
         events: {
             "click .validate": "bValidate",
             "click .save": "bSave",
-            "click .maximize": "maximizePre"
+            "click .maximize": "maximizeModalBody"
         },
         initialize: function () {
             this.template = Handlebars.compile($("#edit-entry-modal-dialog").html());
         },
+        maximizeModalBody: function () {
+            this.$el.find(".modal-body").toggleClass("modal-max-height-600","modal-max-height-all")
+        },
         bValidate: function () {
             try {
-                JSON.parse(this.$el.find("pre").html());
+                JSON.parse(this.$el.find(".editor").val());
                 return true;
             } catch (e) {
                 MongoWebClient.trigger("event:showErrorDialog", {modalHeader: "Error", modalBody: "Invalid json " + e});
                 return false;
             }
-        },
-        maximizePre: function () {
-            this.$el.find("pre").toggleClass("mwc-edit-sm-h");
         },
         render: function () {
             this.$el.append(this.template(this.model));
@@ -291,7 +291,7 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             if (this.bValidate()) {
                 this.closeDialog();
                 var dataToSend = JSON.parse(JSON.stringify(this.model.requestData));
-                dataToSend["dbObject"] = this.$el.find("pre").text();
+                dataToSend["dbObject"] = this.$el.find(".editor").val();
                 dataToSend["_csrf"] = $("#logoutForm").find("input").val();
                 $.ajax({
                     dataType: "json",
@@ -314,12 +314,15 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
         },
         showDialog: function () {
             this.$el.find('.modal').modal('show');
+            var self = this;
+            this.$el.find('.modal').on('shown.bs.modal', function (e) {
+                self.$el.find(".editor").autogrow({contextEl: self.$el.find(".autogrowContext"), onInitialize: true, rowLines: self.$el.find(".lrows"), fixMinHeight: 600});
+            });
         },
         closeDialog: function () {
             this.$el.find('.modal').modal('hide');
         }
     })
-
 
 
 });
