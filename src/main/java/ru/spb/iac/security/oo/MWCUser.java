@@ -1,6 +1,5 @@
 package ru.spb.iac.security.oo;
 
-import com.sun.istack.internal.NotNull;
 import lombok.*;
 import org.springframework.data.annotation.*;
 import org.springframework.data.mongodb.core.mapping.*;
@@ -47,6 +46,16 @@ public class MWCUser  implements Serializable, UserDetails {
     }
 
     public MWCUser() {
+    }
+
+    public MWCUserUi toUser(){
+        return new MWCUserUi(id,username,eMail,authorities);
+    }
+
+    public void update(MWCUserUi user){
+        this.setAuthorities(user.getAuthorities());
+        this.seteMail(user.geteMail());
+        this.setUsername(user.getUsername());
     }
 
     public MWCUser(String password, String username, GrantedAuthority[] authorities) {

@@ -29,14 +29,21 @@
         <!-- enable csrf protection -->
         <csrf/>
     </http>
+
     <global-method-security pre-post-annotations="enabled"/>
+
     <beans:bean id="authProv" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
         <beans:property name="userDetailsService" ref="mwcDetailsService"/>
         <beans:property name="passwordEncoder" ref="encoder"/>
     </beans:bean>
-    <beans:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 
-    <authentication-manager>
+    <beans:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+    <authentication-manager alias="authenticationManager">
+        <authentication-provider>
+            <user-service>
+                <user name="admin" password="jtMongoAdmin" authorities="ROLE_USER,ROLE_PRUSER,ROLE_ADMIN" />
+            </user-service>
+        </authentication-provider>
         <authentication-provider ref="authProv">
         </authentication-provider>
     </authentication-manager>

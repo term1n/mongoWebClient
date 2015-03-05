@@ -2,10 +2,34 @@
  * Created by manaev on 17.10.14.
  */
 MongoWebClient.module("NavigationPanel", function (NavigationPanel, MongoWebClient, Backbone, Marionette, $, _) {
+
+    Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
+        switch (operator) {
+            case '==':
+                return (v1.trim() == v2.trim()) ? options.fn(this) : options.inverse(this);
+            case '===':
+                return (v1 === v2) ? options.fn(this) : options.inverse(this);
+            case '<':
+                return (v1 < v2) ? options.fn(this) : options.inverse(this);
+            case '<=':
+                return (v1 <= v2) ? options.fn(this) : options.inverse(this);
+            case '>':
+                return (v1 > v2) ? options.fn(this) : options.inverse(this);
+            case '>=':
+                return (v1 >= v2) ? options.fn(this) : options.inverse(this);
+            case '&&':
+                return (v1 && v2) ? options.fn(this) : options.inverse(this);
+            case '||':
+                return (v1 || v2) ? options.fn(this) : options.inverse(this);
+            default:
+                return options.inverse(this);
+        }
+    });
+
     NavigationPanel.Model = Backbone.Model.extend({});
     NavigationPanel.Controller = {
         showStartView: function (appName) {
-            MongoWebClient.navigationPanelView = new NavigationPanel.Show({model: new NavigationPanel.Model({appName:appName, username:MongoWebClient.username})});
+            MongoWebClient.navigationPanelView = new NavigationPanel.Show({model: new NavigationPanel.Model({appName:appName, username:MongoWebClient.username, authorities:MongoWebClient.authorities})});
 
             MongoWebClient.navigationRegion.show(MongoWebClient.navigationPanelView);
 

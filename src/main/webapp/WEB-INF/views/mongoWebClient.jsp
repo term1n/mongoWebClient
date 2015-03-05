@@ -9,6 +9,7 @@
 <%@page session="true" %>
 <%@ include file="/WEB-INF/views/header.jsp" %>
 <c:url value="/j_spring_security_logout" var="logoutUrl"/>
+<c:url value="/admin" var="adminUrl"/>
 <html>
 <head>
     <title>Mongo Web Client</title>
@@ -488,6 +489,13 @@
             </li>
         </ul>
         <ul class='nav navbar-nav navbar-right'>
+            {{#each authorities}}
+            {{#ifCond this '==' 'ROLE_ADMIN'}}
+            <li>
+                <a href='${adminUrl}' class="h-cursor-pointer"><i class="fa fa-shield"></i> Admin area </a>
+            </li>
+            {{/ifCond}}
+            {{/each}}
             <li>
                 <p class="navbar-text"><i class="fa fa-user"></i> {{username}} </p>
             </li>
@@ -561,6 +569,7 @@
         ajaxindicatorstop();
     });
     MongoWebClient.username = "${pageContext.request.userPrincipal.name}";
+    MongoWebClient.authorities = "${pageContext.request.userPrincipal.authorities}".replace("[","").trim().replace("]","").trim().split(",");
     MongoWebClient.start();
 </script>
 
