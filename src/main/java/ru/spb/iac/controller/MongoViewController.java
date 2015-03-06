@@ -4,8 +4,6 @@ import lombok.extern.log4j.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.access.prepost.*;
 import org.springframework.security.authentication.*;
-import org.springframework.security.core.*;
-import org.springframework.security.core.authority.*;
 import org.springframework.stereotype.*;
 import org.springframework.ui.*;
 import org.springframework.validation.*;
@@ -25,7 +23,7 @@ import java.security.*;
  */
 @Controller
 @Log4j
-public class MongoViewController {
+public class MongoViewController extends CommonController {
     @Autowired
     @Qualifier("encrypter")
     BCryptHash hash;
@@ -90,14 +88,10 @@ public class MongoViewController {
         } else {
             ModelAndView model = new ModelAndView();
             model.setViewName("login");
-            user.setPassword(hash.getEncPassword(user.getPassword()));
-            GrantedAuthority[] authorities = new GrantedAuthority[1];
-            authorities[0] = new SimpleGrantedAuthority("ROLE_USER");
-            user.setAuthorities(authorities);
             try {
-                mwcUDS.getMongoTemplateFactory().getOperationsTemplate(mwcUDS.getMongoHere()).save(user);
+                addUser(user,hash,mwcUDS);
             } catch (MongoException e) {
-                log.error(e.getMessage(), e);
+                log.error(e.getMessage(),e);
             }
             return model;
         }

@@ -41,7 +41,7 @@
     <authentication-manager alias="authenticationManager">
         <authentication-provider>
             <user-service>
-                <user name="admin" password="jtMongoAdmin" authorities="ROLE_USER,ROLE_PRUSER,ROLE_ADMIN" />
+                <user name="${mongo.rootAdmin.username}" password="${mongo.rootAdmin.password}" authorities="ROLE_USER,ROLE_PRUSER,ROLE_ADMIN" />
             </user-service>
         </authentication-provider>
         <authentication-provider ref="authProv">

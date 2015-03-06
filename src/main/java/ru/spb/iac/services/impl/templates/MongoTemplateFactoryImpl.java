@@ -1,5 +1,6 @@
 package ru.spb.iac.services.impl.templates;
 
+import com.google.common.base.*;
 import com.mongodb.*;
 import lombok.extern.log4j.*;
 import org.springframework.beans.factory.annotation.*;
@@ -7,7 +8,7 @@ import org.springframework.data.mongodb.core.*;
 import org.springframework.stereotype.*;
 import ru.spb.iac.exceptions.MongoException;
 import ru.spb.iac.services.*;
-import ru.spb.iac.ui.models.MongoAddress;
+import ru.spb.iac.ui.models.*;
 import ru.spb.iac.utils.*;
 
 import java.net.*;
@@ -69,6 +70,9 @@ public class MongoTemplateFactoryImpl implements MongoTemplateFactory {
                 Map<String, MongoOperations> map = new HashMap<String, MongoOperations>();
                 for (String db : list) {
                     map.put(db, new MongoTemplate(new SimpleMongoDbFactory(mongoClient, db)));
+                }
+                if(!list.contains(mongoAddress.getDbName()) && !Strings.isNullOrEmpty(mongoAddress.getDbName())){
+                    map.put(mongoAddress.getDbName(), new MongoTemplate(new SimpleMongoDbFactory(mongoClient, mongoAddress.getDbName())));
                 }
                 templatesMap.put(key, map);
             } catch (Exception e) {

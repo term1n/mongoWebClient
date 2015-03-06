@@ -153,7 +153,7 @@ public class MongoContentController extends CommonController {
             writeErrorAjaxResponse(response, "Host or port or database or collection is undefined");
         }
     }
-    @PreAuthorize("hasRole('ROLE_PRUSER','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_PRUSER','ROLE_ADMIN')")
     @RequestMapping(value = "/updateEntity", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
     public
     @ResponseBody
@@ -190,7 +190,7 @@ public class MongoContentController extends CommonController {
             writeErrorAjaxResponse(response, "Host or port or database or collection is undefined");
         }
     }
-    @PreAuthorize("hasRole('ROLE_PRUSER','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_PRUSER','ROLE_ADMIN')")
     @RequestMapping(value = "/deleteEntity", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
     public
     @ResponseBody

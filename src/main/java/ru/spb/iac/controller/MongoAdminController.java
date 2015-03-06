@@ -10,6 +10,7 @@ import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
 import ru.spb.iac.exceptions.*;
 import ru.spb.iac.security.*;
+import ru.spb.iac.security.enc.*;
 import ru.spb.iac.security.oo.*;
 
 import javax.servlet.http.*;
@@ -25,6 +26,10 @@ public class MongoAdminController extends CommonController {
     @Autowired
     @Qualifier("mwcDetailsService")
     MWCUserDetailsService mwcUDS;
+
+    @Autowired
+    @Qualifier("encrypter")
+    BCryptHash hash;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value = "/getMWCUsers", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
@@ -54,7 +59,7 @@ public class MongoAdminController extends CommonController {
                     HttpServletResponse response) {
         try {
             GrantedAuthority[] auth = gson.fromJson(authorities, SimpleGrantedAuthority[].class);
-            MWCUserUi user = new MWCUserUi(id,username,eMail,auth);
+            MWCUserUi user = new MWCUserUi(id, username, eMail, auth);
             Query query = new Query(Criteria.where("_id").is(user.getId()));
             MWCUser tUser = mwcUDS.getMongoTemplateFactory().getOperationsTemplate(mwcUDS.getMongoHere()).findOne(query, MWCUser.class, MWCUser.COLLECTION_NAME);
             tUser.update(user);
@@ -65,11 +70,12 @@ public class MongoAdminController extends CommonController {
             writeErrorAjaxResponse(response, e.getMessage());
         }
     }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value = "/removeUser", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
     public
     @ResponseBody
-    void removeUser( @RequestParam(value = "id", required = true) String id,
+    void removeUser(@RequestParam(value = "id", required = true) String id,
                     HttpServletResponse response) {
         try {
             Query query = new Query(Criteria.where("_id").is(id));
@@ -80,4 +86,19 @@ public class MongoAdminController extends CommonController {
             writeErrorAjaxResponse(response, e.getMessage());
         }
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @RequestMapping(value = "/addUser", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+    public
+    @ResponseBody
+    void addUser(MWCUser user, HttpServletResponse response) {
+        try {
+            addUser(user, hash, mwcUDS);
+            writeSuccessAjaxResponse(response, "User added successfully");
+        } catch (MongoException e) {
+            log.error(e.getMessage(), e);
+            writeErrorAjaxResponse(response, e.getMessage());
+        }
+    }
+
 }

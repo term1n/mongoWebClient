@@ -6,7 +6,8 @@ var MWCAdmin = new Marionette.Application();
 var MongoWebClient = new Marionette.Application();
 
 MWCAdmin.addRegions({
-    nUserManRegion: "#nuserMan"
+    nUserManRegion: "#nuserMan",
+    addUserRegion: "#add-user-dialog-div"
 });
 
 MongoWebClient.addRegions({
@@ -15,6 +16,12 @@ MongoWebClient.addRegions({
 
 MWCAdmin.on("start", function () {
 });
+
+MWCAdmin.showAddUserDialog = function(){
+    var s_db = new MWCAdmin.MWCNUserMan.AddUserDialog(new MWCAdmin.MWCNUserMan.SimpleModel());
+    MWCAdmin.addUserRegion.show(s_db);
+    s_db.showDialog();
+}
 
 MWCAdmin.showNUserManagement = function () {
     var coll = new MWCAdmin.MWCNUserMan.MWCUsers().fetch();

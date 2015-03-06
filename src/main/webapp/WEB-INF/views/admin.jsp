@@ -18,7 +18,7 @@
 <nav id="navigation-panel" class="navbar navbar-inverse" role="navigation">
     <div class="container-fluid">
         <div class='navbar-header'>
-                <span class='navbar-brand'>MongoWebClient admin area</span>
+            <span class='navbar-brand'>MongoWebClient admin area</span>
         </div>
         <div class='collapse navbar-collapse'>
             <ul class='nav navbar-nav'>
@@ -33,6 +33,9 @@
                 </li>
             </ul>
             <ul class='nav navbar-nav navbar-right'>
+                <li>
+                    <a href="<c:url value="/mongoWebClient" />"> <i class="fa fa-database"></i> View database</a>
+                </li>
                 <li>
                     <p class="navbar-text"><i class="fa fa-user"></i> ${user.username} </p>
                 </li>
@@ -52,8 +55,11 @@
 </div>
 <div id="common-dialogs-div">
 </div>
+<div id="add-user-dialog-div">
+</div>
 <script type="text/x-handlebars-template" id="common-success-modal-dialog">
-    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="smallModal" aria-hidden="true" style="z-index:10000">
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="smallModal" aria-hidden="true"
+         style="z-index:10000">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header modal-header-success">
@@ -72,7 +78,8 @@
 </script>
 
 <script type="text/x-handlebars-template" id="common-confirm-modal-dialog">
-    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="smallModal" aria-hidden="true" style="z-index:10000">
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="smallModal" aria-hidden="true"
+         style="z-index:10000">
         <div class="modal-dialog modal-sm">
             <div class="modal-content panel-warning">
                 <div class="modal-header panel-heading modal-header-confirm">
@@ -103,7 +110,8 @@
 
 
 <script type="text/x-handlebars-template" id="common-error-modal-dialog">
-    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="smallModal" aria-hidden="true" style="z-index:10000">
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="smallModal" aria-hidden="true"
+         style="z-index:10000">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header modal-header-error">
@@ -120,6 +128,49 @@
         </div>
     </div>
 </script>
+
+<script type="text/x-handlebars-template" id="add-user-modal-dialog-tpl">
+    <div class="modal fade dmcModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header h-cursor-pointer">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Add user</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-signin">
+                        <div class="form-group has-feedback has-feedback-left" style="margin-bottom: 10px;">
+                            <label class="control-label">Username</label>
+                            <input type="text" name='username' class="form-control" placeholder="login"/>
+                            <i class="form-control-feedback glyphicon glyphicon-user"></i>
+                        </div>
+                        <div class="form-group has-feedback has-feedback-left" style="margin-bottom: 10px;">
+                            <label class="control-label">Password</label>
+                            <input type="password" name='password' class="form-control"
+                                   placeholder="password"/>
+                            <i class="form-control-feedback glyphicon glyphicon-lock "></i>
+                        </div>
+                        <div class="form-group has-feedback has-feedback-left" style="margin-bottom: 20px;">
+                            <label class="control-label">eMail</label>
+                            <input type="email" name='eMail' class="form-control" placeholder="eMail"/>
+                            <i class="form-control-feedback glyphicon glyphicon-lock "></i>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <div>
+                        <button class="btn btn-lg btn-primary btn-block btn-add-user" name="submit">
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</script>
+
 <script type="text/x-handlebars-template" id="nusersman-collection-item-tpl">
     <div class="col-lg-12">
         <div class="col-lg-3">
@@ -130,37 +181,36 @@
         </div>
         <div class="col-lg-3">
             {{#each authorities}}
-                <div class="row" style="padding-top:5px;">
-                    <div class="col-lg-6">
-                        <span>{{role}} </span>
-                    </div>
-                    <div class="col-lg-6">
-                        <button type="button" class="btn btn-default dropdown-toggle removeRole" roletodel={{role}}><span class="fa fa-minus"/></button>
+            <div class="row" style="padding-top:5px;">
+                <div class="col-mwcC">
+                    <div class="input-group-sm">
+                        <span type="button" class="fa fa-plus dropdown-toggle btn" data-toggle="dropdown"
+                              aria-expanded="false"></span>
+                        <ul class="dropdown-menu first-dropdown" role="menu">
+                            <li><a href="#">ROLE_USER</a></li>
+                            <li><a href="#">ROLE_PRUSER</a></li>
+                            <li><a href="#">ROLE_ADMIN</a></li>
+                        </ul>
                     </div>
                 </div>
+                <div class="col-mwcC" style="padding-left: 0px;padding-right: 0px;">
+                    <div class="input-group-sm">
+                        <span class="fa fa-minus removeRole dropdown-toggle btn hoverable-scale"
+                              roletodel="{{role}}"></span>
+                    </div>
+                </div>
+                <div class="col-mwcC">
+                    <span>{{role}} </span>
+                </div>
+
+            </div>
             {{/each}}
         </div>
-        <div class="col-lg-3">
-            <div class="col-lg-6">
-                <div class="input-group">
-                    <div class="input-group-btn">
-                        <button type="button" class="btn btn-default dropdown-toggle remove-user-button"> <span class="fa fa-remove"></span> Remove</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="input-group-btn">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                        <span class="fa fa-plus"></span> Add<span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu first-dropdown" role="menu">
-                        <li><a href="#">ROLE_USER</a></li>
-                        <li><a href="#">ROLE_PRUSER</a></li>
-                        <li><a href="#">ROLE_ADMIN</a></li>
-                    </ul>
-                </div>
-            </div>
+        <div class="col-mwcC">
+            <span class="fa fa-remove btn dropdown-toggle remove-user-button hoverable-scale"
+                  style="font-size:25;"></span>
         </div>
+    </div>
     </div>
 </script>
 
@@ -169,8 +219,17 @@
         <div>
             <h3>MongoWebClient users</h3>
         </div>
-        <div>
-            <button type="button" class="btn btn-default dropdown-toggle addUser"><span class="fa fa-plus-square"></span> AddUser</button>
+    </div>
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-mwcC">
+                <h4>Controls </h4>
+            </div>
+            <div class="col-mwcC">
+                <button type="button" class="btn btn-default dropdown-toggle addUser"><span
+                        class="fa fa-plus-square"></span> AddUser
+                </button>
+            </div>
         </div>
     </div>
     <div class="panel-body">
@@ -195,8 +254,11 @@
         <div class="panel">
             <div class="panel-body">
                 <p> Change granted authorities, remove and add users if nesessary</p>
+
                 <p> ROLE_ADMIN - all actions, access to admin area</p>
+
                 <p> ROLE_PRUSER - reading, deleting items, updating items</p>
+
                 <p> ROLE_USER - only reading</p>
             </div>
         </div>

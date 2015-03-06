@@ -316,7 +316,7 @@ MongoWebClient.module("DatabaseLayout", function (DatabaseLayout, MongoWebClient
             this.$el.find('.modal').modal('show');
             var self = this;
             this.$el.find('.modal').on('shown.bs.modal', function (e) {
-                self.$el.find(".editor").autogrow({contextEl: self.$el.find(".autogrowContext"), onInitialize: true, rowLines: self.$el.find(".lrows"), fixMinHeight: 600});
+                self.$el.find(".editor").autogrow({contextEl: self.$el.find(".autogrowContext"), onInitialize: true, rowLines: self.$el.find(".lrows"), fixMinHeight: 600}).allowTabChar();
             });
         },
         closeDialog: function () {
